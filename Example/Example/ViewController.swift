@@ -136,8 +136,8 @@ class ViewController: UIViewController {
         }
         
         editImageMosaicToolSwitch = UISwitch()
-        editImageMosaicToolSwitch.isOn = config.tools.contains(.mosaic)
-        editImageMosaicToolSwitch.addTarget(self, action: #selector(mosaicToolChanged), for: .valueChanged)
+
+      
         editImageToolView.addSubview(editImageMosaicToolSwitch)
         editImageMosaicToolSwitch.snp.makeConstraints { make in
             make.left.equalTo(mosaicToolLabel.snp.right).offset(spacing)
@@ -264,14 +264,6 @@ class ViewController: UIViewController {
             config.tools.removeAll { $0 == .textSticker }
         } else {
             config.tools.append(.textSticker)
-        }
-    }
-    
-    @objc func mosaicToolChanged() {
-        if config.tools.contains(.mosaic) {
-            config.tools.removeAll { $0 == .mosaic }
-        } else {
-            config.tools.append(.mosaic)
         }
     }
     

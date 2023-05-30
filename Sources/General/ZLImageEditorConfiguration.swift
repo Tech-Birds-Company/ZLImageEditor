@@ -37,14 +37,14 @@ public class ZLImageEditorConfiguration: NSObject {
         ZLImageEditorConfiguration.single = ZLImageEditorConfiguration()
     }
     
-    private var pri_tools: [ZLImageEditorConfiguration.EditTool] = [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter, .adjust]
-    /// Edit image tools. (Default order is draw, clip, imageSticker, textSticker, mosaic, filtter)
+    private var pri_tools: [ZLImageEditorConfiguration.EditTool] = [.draw, .clip, .imageSticker, .textSticker, .filter, .adjust]
+    /// Edit image tools. (Default order is draw, clip, imageSticker, textSticker,, filtter)
     /// Because Objective-C Array can't contain Enum styles, so this property is not available in Objective-C.
     /// - warning: If you want to use the image sticker feature, you must provide a view that implements ZLImageStickerContainerDelegate.
     public var tools: [ZLImageEditorConfiguration.EditTool] {
         get {
             if pri_tools.isEmpty {
-                return [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter, .adjust]
+                return [.draw, .clip, .imageSticker, .textSticker, .filter, .adjust]
             } else {
                 return pri_tools
             }
@@ -171,7 +171,7 @@ public class ZLImageEditorConfiguration: NSObject {
     /// If image edit tools only has clip and this property is true. When you click edit, the cropping interface (i.e. ZLClipImageViewController) will be displayed. Defaults to false
     @objc public var showClipDirectlyIfOnlyHasClipTool = false
     
-    /// Whether to support redo in graffiti and mosaic tools. Defaults to false
+    /// Whether to support redo in graffiti tools. Defaults to false
     @objc public var canRedo = false
 }
 
@@ -181,7 +181,6 @@ public extension ZLImageEditorConfiguration {
         case clip
         case imageSticker
         case textSticker
-        case mosaic
         case filter
         case adjust
     }

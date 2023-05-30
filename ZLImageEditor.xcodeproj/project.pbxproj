@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E17C8B642A26982F00C86D82 /* ZLEditImageViewController+UIGestureRecognizerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C8B632A26982F00C86D82 /* ZLEditImageViewController+UIGestureRecognizerDelegate.swift */; };
+		E17C8B662A26986900C86D82 /* ZLEditImageViewController+UIScrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C8B652A26986900C86D82 /* ZLEditImageViewController+UIScrollViewDelegate.swift */; };
+		E17C8B682A2698D100C86D82 /* ZLEditImageViewController + UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C8B672A2698D100C86D82 /* ZLEditImageViewController + UICollectionView.swift */; };
+		E17C8B6A2A26994600C86D82 /* ZLEditImageViewController+ZLStickerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C8B692A26994600C86D82 /* ZLEditImageViewController+ZLStickerViewDelegate.swift */; };
+		E17C8B6C2A26997400C86D82 /* ZLEditImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C8B6B2A26997400C86D82 /* ZLEditImageModel.swift */; };
+		E17C8B6E2A2699D600C86D82 /* ZLDrawPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C8B6D2A2699D600C86D82 /* ZLDrawPath.swift */; };
+		E17C8B742A26A0FF00C86D82 /* ImageStickerContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C8B732A26A0FF00C86D82 /* ImageStickerContainerView.swift */; };
 		E40208DC256B9BA60077F5DC /* ZLImageEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = E40208DA256B9BA60077F5DC /* ZLImageEditor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E40208EB256B9F9C0077F5DC /* ZLEditImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40208E4256B9F9C0077F5DC /* ZLEditImageViewController.swift */; };
 		E40208EC256B9F9C0077F5DC /* ZLImageStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40208E5256B9F9C0077F5DC /* ZLImageStickerView.swift */; };
@@ -39,6 +46,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E17C8B632A26982F00C86D82 /* ZLEditImageViewController+UIGestureRecognizerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZLEditImageViewController+UIGestureRecognizerDelegate.swift"; sourceTree = "<group>"; };
+		E17C8B652A26986900C86D82 /* ZLEditImageViewController+UIScrollViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZLEditImageViewController+UIScrollViewDelegate.swift"; sourceTree = "<group>"; };
+		E17C8B672A2698D100C86D82 /* ZLEditImageViewController + UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZLEditImageViewController + UICollectionView.swift"; sourceTree = "<group>"; };
+		E17C8B692A26994600C86D82 /* ZLEditImageViewController+ZLStickerViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZLEditImageViewController+ZLStickerViewDelegate.swift"; sourceTree = "<group>"; };
+		E17C8B6B2A26997400C86D82 /* ZLEditImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLEditImageModel.swift; sourceTree = "<group>"; };
+		E17C8B6D2A2699D600C86D82 /* ZLDrawPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLDrawPath.swift; sourceTree = "<group>"; };
+		E17C8B732A26A0FF00C86D82 /* ImageStickerContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageStickerContainerView.swift; sourceTree = "<group>"; };
 		E40208D7256B9BA60077F5DC /* ZLImageEditor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZLImageEditor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E40208DA256B9BA60077F5DC /* ZLImageEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLImageEditor.h; sourceTree = "<group>"; };
 		E40208DB256B9BA60077F5DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -114,6 +128,7 @@
 		E4020902256BA00D0077F5DC /* General */ = {
 			isa = PBXGroup;
 			children = (
+				E17C8B732A26A0FF00C86D82 /* ImageStickerContainerView.swift */,
 				E4020909256BA1DE0077F5DC /* ZLImageEditorDefine.swift */,
 				E402090D256BA1F40077F5DC /* ZLImageEditorLanguageDefine.swift */,
 				E4020911256BA27D0077F5DC /* ZLImageEditorConfiguration.swift */,
@@ -121,6 +136,12 @@
 				FDE1A558282E580900178B0F /* ZLImageEditorUIConfiguration.swift */,
 				FDE1A55A282E58E700178B0F /* ZLImageEditorUIConfiguration+Chaining.swift */,
 				E40208E4256B9F9C0077F5DC /* ZLEditImageViewController.swift */,
+				E17C8B6D2A2699D600C86D82 /* ZLDrawPath.swift */,
+				E17C8B6B2A26997400C86D82 /* ZLEditImageModel.swift */,
+				E17C8B692A26994600C86D82 /* ZLEditImageViewController+ZLStickerViewDelegate.swift */,
+				E17C8B672A2698D100C86D82 /* ZLEditImageViewController + UICollectionView.swift */,
+				E17C8B652A26986900C86D82 /* ZLEditImageViewController+UIScrollViewDelegate.swift */,
+				E17C8B632A26982F00C86D82 /* ZLEditImageViewController+UIGestureRecognizerDelegate.swift */,
 				E40208E9256B9F9C0077F5DC /* ZLClipImageViewController.swift */,
 				E40208E8256B9F9C0077F5DC /* ZLInputTextViewController.swift */,
 				FDC9B2432990D66300963047 /* ZLBaseStickerView.swift */,
@@ -235,16 +256,23 @@
 				E4020912256BA27D0077F5DC /* ZLImageEditorConfiguration.swift in Sources */,
 				E40208F4256B9FA70077F5DC /* ZLClipImageDismissAnimatedTransition.swift in Sources */,
 				E40208FE256BA0080077F5DC /* String+ZLImageEditor.swift in Sources */,
+				E17C8B6A2A26994600C86D82 /* ZLEditImageViewController+ZLStickerViewDelegate.swift in Sources */,
+				E17C8B642A26982F00C86D82 /* ZLEditImageViewController+UIGestureRecognizerDelegate.swift in Sources */,
 				E40208FD256BA0080077F5DC /* UIImage+ZLImageEditor.swift in Sources */,
 				FD8EFA54277206D30067ADF1 /* ZLEditToolCells.swift in Sources */,
 				FD1551CA28BE2C720043D844 /* UIView+ZLImageEditor.swift in Sources */,
 				E40208FF256BA0080077F5DC /* Bundle+ZLImageEditor.swift in Sources */,
 				E40208F0256B9F9C0077F5DC /* ZLClipImageViewController.swift in Sources */,
+				E17C8B662A26986900C86D82 /* ZLEditImageViewController+UIScrollViewDelegate.swift in Sources */,
 				FDE1A559282E580900178B0F /* ZLImageEditorUIConfiguration.swift in Sources */,
 				FDE1A561282E61B500178B0F /* ZLEnlargeButton.swift in Sources */,
 				FDE1A55B282E58E700178B0F /* ZLImageEditorUIConfiguration+Chaining.swift in Sources */,
+				E17C8B682A2698D100C86D82 /* ZLEditImageViewController + UICollectionView.swift in Sources */,
 				FD7E7508284E134600EF34DD /* ZLProgressHUD.swift in Sources */,
 				FDD5289226C3FFCA00338B06 /* ZLImageEditor.swift in Sources */,
+				E17C8B6E2A2699D600C86D82 /* ZLDrawPath.swift in Sources */,
+				E17C8B742A26A0FF00C86D82 /* ImageStickerContainerView.swift in Sources */,
+				E17C8B6C2A26997400C86D82 /* ZLEditImageModel.swift in Sources */,
 				E4020900256BA0080077F5DC /* Cell+ZLImageEditor.swift in Sources */,
 				E40208EC256B9F9C0077F5DC /* ZLImageStickerView.swift in Sources */,
 				E40208F7256B9FCB0077F5DC /* CGFloat+ZLImageEditor.swift in Sources */,

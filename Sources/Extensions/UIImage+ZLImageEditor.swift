@@ -178,27 +178,6 @@ extension ZLImageEditorWrapper where Base: UIImage {
         return newImage
     }
     
-    func mosaicImage() -> UIImage? {
-        guard let currCgImage = base.cgImage else {
-            return nil
-        }
-        
-        let scale = 8 * width / UIScreen.main.bounds.width
-        let currCiImage = CIImage(cgImage: currCgImage)
-        let filter = CIFilter(name: "CIPixellate")
-        filter?.setValue(currCiImage, forKey: kCIInputImageKey)
-        filter?.setValue(scale, forKey: kCIInputScaleKey)
-        guard let outputImage = filter?.outputImage else { return nil }
-        
-        let context = CIContext()
-        
-        if let cgImg = context.createCGImage(outputImage, from: CGRect(origin: .zero, size: base.size)) {
-            return UIImage(cgImage: cgImg)
-        } else {
-            return nil
-        }
-    }
-    
     func resize(_ size: CGSize, scale: CGFloat? = nil) -> UIImage? {
         if size.width <= 0 || size.height <= 0 {
             return nil

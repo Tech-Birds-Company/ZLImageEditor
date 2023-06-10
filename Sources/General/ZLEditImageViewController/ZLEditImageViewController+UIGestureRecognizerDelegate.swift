@@ -13,9 +13,9 @@ extension ZLEditImageViewController: UIGestureRecognizerDelegate {
             return false
         }
         if gestureRecognizer is UITapGestureRecognizer {
-            if bottomShadowView.alpha == 1 {
+            if bottomToolsContainerView.alpha == 1 {
                 let p = gestureRecognizer.location(in: view)
-                return !bottomShadowView.frame.contains(p)
+                return !bottomToolsContainerView.frame.contains(p)
             } else {
                 return true
             }

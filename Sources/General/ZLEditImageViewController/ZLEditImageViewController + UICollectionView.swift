@@ -83,7 +83,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
             let toolType = tools[indexPath.row]
             switch toolType {
             case .draw:
-                drawBtnClick()
+                self.drawBtnClick()
             case .clip:
                 clipBtnClick()
             case .imageSticker:

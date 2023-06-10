@@ -140,7 +140,6 @@ class ZLClipImageViewController: UIViewController {
     }
     
     deinit {
-        zl_debugPrint("ZLClipImageViewController deinit")
         self.cleanTimer()
     }
     

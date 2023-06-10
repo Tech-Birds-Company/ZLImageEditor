@@ -50,7 +50,7 @@ class ZLImageStickerView: ZLBaseStickerView<ZLImageStickerState> {
     }
     
     deinit {
-        zl_debugPrint("ZLImageStickerView deinit")
+        debugPrint("ZLImageStickerView deinit")
     }
     
     convenience init(from state: ZLImageStickerState) {

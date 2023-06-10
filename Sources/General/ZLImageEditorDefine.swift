@@ -57,7 +57,3 @@ func deviceSafeAreaInsets() -> UIEdgeInsets {
     
     return insets
 }
-
-func zl_debugPrint(_ message: Any) {
-//    debugPrint(message)
-}

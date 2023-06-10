@@ -92,7 +92,7 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
     }
     
     deinit {
-        zl_debugPrint("ZLTextStickerView deinit")
+        debugPrint("ZLTextStickerView deinit")
     }
     
     convenience init(from state: ZLTextStickerState) {

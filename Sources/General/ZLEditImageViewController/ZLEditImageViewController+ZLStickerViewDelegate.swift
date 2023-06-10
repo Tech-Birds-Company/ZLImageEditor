@@ -9,7 +9,6 @@ import UIKit
 
 extension ZLEditImageViewController: ZLStickerViewDelegate {
     func stickerBeginOperation(_ sticker: UIView) {
-        setToolView(show: false)
         ashbinView.layer.removeAllAnimations()
         ashbinView.isHidden = false
         var frame = ashbinView.frame
@@ -53,7 +52,6 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
     }
 
     func stickerEndOperation(_ sticker: UIView, panGes: UIPanGestureRecognizer) {
-        setToolView(show: true)
         ashbinView.layer.removeAllAnimations()
         ashbinView.isHidden = true
 

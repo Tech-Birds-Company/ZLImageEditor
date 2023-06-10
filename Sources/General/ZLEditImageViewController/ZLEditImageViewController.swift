@@ -68,7 +68,11 @@ open class ZLEditImageViewController: UIViewController {
         return view
     }()
     
-    open lazy var headerView = UIView()
+    open lazy var headerView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        return view
+    }()
      
     open lazy var bottomToolsContainerView = {
         let view = UIView()
@@ -489,7 +493,7 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .init(white: 245/255, alpha: 1.0)
         
         view.addSubview(mainScrollView)
         mainScrollView.addSubview(containerView)

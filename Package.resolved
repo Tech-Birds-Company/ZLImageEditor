@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SnapKit",
+        "repositoryURL": "https://github.com/Tech-Birds-Company/SnapKit",
+        "state": {
+          "branch": "develop",
+          "revision": "8b82ff31d4b751109ae1761ccefdf28dd81f4ae3",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

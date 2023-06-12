@@ -1,30 +1,5 @@
-//
-//  ZLEditImageViewController.swift
-//  ZLImageEditor
-//
-//  Created by long on 2020/8/26.
-//
-//  Copyright (c) 2020 Long Zhang <495181165@qq.com>
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
-//  furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//  THE SOFTWARE.
-
 import UIKit
+import SnapKit
 
 open class ZLEditImageViewController: UIViewController {
 
@@ -46,7 +21,7 @@ open class ZLEditImageViewController: UIViewController {
     
     open lazy var mainScrollView: UIScrollView = {
         let view = UIScrollView()
-        view.backgroundColor = .white
+        view.backgroundColor = .init(white: 245/255, alpha: 1.0)
         view.minimumZoomScale = 1
         view.maximumZoomScale = 3
         view.delegate = self
@@ -70,13 +45,18 @@ open class ZLEditImageViewController: UIViewController {
     
     open lazy var headerView = {
         let view = UIView()
-        view.backgroundColor = .black
+        view.backgroundColor = .init(white: 249/255, alpha: 1.0)
+        view.layer.masksToBounds = false
+        view.layer.shadowRadius = 0
+        view.layer.shadowOpacity = 1
+        view.layer.shadowColor =  UIColor(red: 0, green: 0, blue: 0, alpha: 0.3).cgColor
+        view.layer.shadowOffset = CGSize(width: 0 , height:0.5)
         return view
     }()
      
     open lazy var bottomToolsContainerView = {
         let view = UIView()
-        view.backgroundColor = .black
+        view.backgroundColor = .white
         return view
     }()
     
@@ -84,8 +64,8 @@ open class ZLEditImageViewController: UIViewController {
         let btn = ZLEnlargeButton(type: .custom)
         btn.setImage(getImage("zl_retake"), for: .normal)
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
-        btn.adjustsImageWhenHighlighted = false
         btn.enlargeInset = 30
+        btn.backgroundColor = .black
         return btn
     }()
     
@@ -105,7 +85,6 @@ open class ZLEditImageViewController: UIViewController {
         let btn = UIButton(type: .custom)
         btn.setImage(getImage("zl_revoke_disable"), for: .disabled)
         btn.setImage(getImage("zl_revoke"), for: .normal)
-        btn.adjustsImageWhenHighlighted = false
         btn.isEnabled = false
         btn.isHidden = true
         btn.addTarget(self, action: #selector(revokeBtnClick), for: .touchUpInside)
@@ -116,13 +95,13 @@ open class ZLEditImageViewController: UIViewController {
     
     open lazy var editToolCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 30, height: 30)
+        layout.itemSize = CGSize(width: 40, height: 40)
         layout.minimumLineSpacing = 20
         layout.minimumInteritemSpacing = 20
         layout.scrollDirection = .horizontal
         
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.backgroundColor = .clear
+        view.backgroundColor = .init(white: 241/255, alpha: 1.0)
         view.delegate = self
         view.dataSource = self
         view.showsHorizontalScrollIndicator = false
@@ -257,9 +236,24 @@ open class ZLEditImageViewController: UIViewController {
     ) {
         let tools = ZLImageEditorConfiguration.default().tools
         if ZLImageEditorConfiguration.default().showClipDirectlyIfOnlyHasClipTool, tools.count == 1, tools.contains(.clip) {
-            let vc = ZLClipImageViewController(image: image, editRect: editModel?.editRect, angle: editModel?.angle ?? 0, selectRatio: editModel?.selectRatio)
+            let vc = ZLClipImageViewController(
+                image: image,
+                editRect: editModel?.editRect,
+                angle: editModel?.angle ?? 0,
+                selectRatio: editModel?.selectRatio
+            )
             vc.clipDoneBlock = { angle, editRect, ratio in
-                let m = ZLEditImageModel(drawPaths: [], editRect: editRect, angle: angle, brightness: 0, contrast: 0, saturation: 0, selectRatio: ratio, selectFilter: .normal, textStickers: nil, imageStickers: nil)
+                let m = ZLEditImageModel(
+                    drawPaths: [],
+                    editRect: editRect,
+                    angle: angle, brightness: 0,
+                    contrast: 0,
+                    saturation: 0,
+                    selectRatio: ratio,
+                    selectFilter: .normal,
+                    textStickers: nil,
+                    imageStickers: nil
+                )
                 completion?(image.zl.clipImage(angle: angle, editRect: editRect, isCircle: ratio.isCircle) ?? image, m)
             }
             vc.animateDismiss = animate
@@ -354,18 +348,8 @@ open class ZLEditImageViewController: UIViewController {
         
         shouldLayout = false
         debugPrint("edit image layout subviews")
-        var insets = UIEdgeInsets.zero
-        if #available(iOS 11.0, *) {
-            insets = self.view.safeAreaInsets
-        }
-        
-        mainScrollView.frame = view.bounds
+
         resetContainerViewFrame()
-        
-        headerView.frame = CGRect(x: 0, y: 0, width: view.zl.width, height: 150)
-        cancelBtn.frame = CGRect(x: 30, y: insets.top + 10, width: 28, height: 28)
-        
-        bottomToolsContainerView.frame = CGRect(x: 0, y: view.zl.height - 140 - insets.bottom, width: view.zl.width, height: 140 + insets.bottom)
         
         if canRedo, let redoBtn = redoBtn {
             redoBtn.frame = CGRect(x: view.zl.width - 15 - 35, y: 30, width: 35, height: 30)
@@ -403,14 +387,6 @@ open class ZLEditImageViewController: UIViewController {
             width: 25,
             height: 25
         )
-        
-        let toolY: CGFloat = 85
-        
-        let doneBtnH = ZLImageEditorLayout.bottomToolBtnH
-        let doneBtnW = localLanguageTextValue(.editFinish).zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: doneBtnH)).width + 20
-        doneBtn.frame = CGRect(x: view.zl.width - 20 - doneBtnW, y: toolY - 2, width: doneBtnW, height: doneBtnH)
-        
-        editToolCollectionView.frame = CGRect(x: 20, y: toolY, width: view.zl.width - 20 - 20 - doneBtnW - 20, height: 30)
         
         if !drawPaths.isEmpty {
             drawLine()
@@ -493,20 +469,45 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     func setupUI() {
-        view.backgroundColor = .init(white: 245/255, alpha: 1.0)
+
+        view.addSubview(headerView) { make in
+            make.top.leading.trailing.equalToSuperview()
+            let window = UIApplication.shared.keyWindow
+            let topSafeArea = window?.safeAreaInsets.top ?? 0.0
+            make.height.equalTo(60 + topSafeArea)
+        }
+        headerView.addSubview(cancelBtn) { make in
+            make.leading.equalToSuperview().offset(24)
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            make.bottom.equalToSuperview()
+        }
         
-        view.addSubview(mainScrollView)
+        view.addSubview(mainScrollView) { make in
+            make.top.equalTo(headerView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+        }
+
         mainScrollView.addSubview(containerView)
         containerView.addSubview(imageView)
         containerView.addSubview(drawingImageView)
         containerView.addSubview(stickersContainer)
         
-        view.addSubview(headerView)
-        headerView.addSubview(cancelBtn)
-        
-        view.addSubview(bottomToolsContainerView)
-        bottomToolsContainerView.addSubview(editToolCollectionView)
-        bottomToolsContainerView.addSubview(doneBtn)
+        view.addSubview(bottomToolsContainerView) { make in
+            make.top.equalTo(mainScrollView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(250)
+            make.bottom.equalToSuperview()
+        }
+        bottomToolsContainerView.addSubview(editToolCollectionView) { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.equalToSuperview().offset(24)
+            make.height.equalTo(40)
+        }
+        bottomToolsContainerView.addSubview(doneBtn) { make in
+            make.horizontalEdges.equalToSuperview().inset(16)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).inset(16)
+            make.height.equalTo(52)
+        }
         
         if tools.contains(.draw) {
             let drawColorLayout = UICollectionViewFlowLayout()
@@ -597,7 +598,6 @@ open class ZLEditImageViewController: UIViewController {
             let btn = UIButton(type: .custom)
             btn.setImage(getImage("zl_redo_disable"), for: .disabled)
             btn.setImage(getImage("zl_redo"), for: .normal)
-            btn.adjustsImageWhenHighlighted = false
             btn.isEnabled = false
             btn.isHidden = true
             btn.addTarget(self, action: #selector(redoBtnClick), for: .touchUpInside)

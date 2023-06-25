@@ -505,7 +505,7 @@ class ZLClipImageViewController: UIViewController {
         dismissAnimateFromRect = cancelClipAnimateFrame
         dismissAnimateImage = presentAnimateImage
         cancelClipBlock?()
-        dismiss(animated: animateDismiss, completion: nil)
+        dismiss(animated: false, completion: nil)
     }
     
     @objc func revertBtnClick() {

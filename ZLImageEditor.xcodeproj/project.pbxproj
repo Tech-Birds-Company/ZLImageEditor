@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E10580DE2A48977C00F22ADC /* ZLEditImageViewController+ButtonsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10580DD2A48977C00F22ADC /* ZLEditImageViewController+ButtonsAction.swift */; };
+		E10580E02A4899B300F22ADC /* ZLEditImageViewController + Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10580DF2A4899B300F22ADC /* ZLEditImageViewController + Constants.swift */; };
+		E10580E22A489A3200F22ADC /* ZLEditImageViewController + StickersOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10580E12A489A3200F22ADC /* ZLEditImageViewController + StickersOperation.swift */; };
 		E17C8B642A26982F00C86D82 /* ZLEditImageViewController+UIGestureRecognizerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C8B632A26982F00C86D82 /* ZLEditImageViewController+UIGestureRecognizerDelegate.swift */; };
 		E17C8B662A26986900C86D82 /* ZLEditImageViewController+UIScrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C8B652A26986900C86D82 /* ZLEditImageViewController+UIScrollViewDelegate.swift */; };
 		E17C8B682A2698D100C86D82 /* ZLEditImageViewController + UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C8B672A2698D100C86D82 /* ZLEditImageViewController + UICollectionView.swift */; };
@@ -48,6 +51,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E10580DD2A48977C00F22ADC /* ZLEditImageViewController+ButtonsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZLEditImageViewController+ButtonsAction.swift"; sourceTree = "<group>"; };
+		E10580DF2A4899B300F22ADC /* ZLEditImageViewController + Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZLEditImageViewController + Constants.swift"; sourceTree = "<group>"; };
+		E10580E12A489A3200F22ADC /* ZLEditImageViewController + StickersOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZLEditImageViewController + StickersOperation.swift"; sourceTree = "<group>"; };
 		E17C8B632A26982F00C86D82 /* ZLEditImageViewController+UIGestureRecognizerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZLEditImageViewController+UIGestureRecognizerDelegate.swift"; sourceTree = "<group>"; };
 		E17C8B652A26986900C86D82 /* ZLEditImageViewController+UIScrollViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZLEditImageViewController+UIScrollViewDelegate.swift"; sourceTree = "<group>"; };
 		E17C8B672A2698D100C86D82 /* ZLEditImageViewController + UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZLEditImageViewController + UICollectionView.swift"; sourceTree = "<group>"; };
@@ -109,6 +115,9 @@
 				E17C8B652A26986900C86D82 /* ZLEditImageViewController+UIScrollViewDelegate.swift */,
 				E17C8B632A26982F00C86D82 /* ZLEditImageViewController+UIGestureRecognizerDelegate.swift */,
 				E40208E4256B9F9C0077F5DC /* ZLEditImageViewController.swift */,
+				E10580E12A489A3200F22ADC /* ZLEditImageViewController + StickersOperation.swift */,
+				E10580DD2A48977C00F22ADC /* ZLEditImageViewController+ButtonsAction.swift */,
+				E10580DF2A4899B300F22ADC /* ZLEditImageViewController + Constants.swift */,
 			);
 			path = ZLEditImageViewController;
 			sourceTree = "<group>";
@@ -282,7 +291,10 @@
 				FD1551CA28BE2C720043D844 /* UIView+ZLImageEditor.swift in Sources */,
 				E40208FF256BA0080077F5DC /* Bundle+ZLImageEditor.swift in Sources */,
 				E40208F0256B9F9C0077F5DC /* ZLClipImageViewController.swift in Sources */,
+				E10580E22A489A3200F22ADC /* ZLEditImageViewController + StickersOperation.swift in Sources */,
+				E10580DE2A48977C00F22ADC /* ZLEditImageViewController+ButtonsAction.swift in Sources */,
 				E17C8B662A26986900C86D82 /* ZLEditImageViewController+UIScrollViewDelegate.swift in Sources */,
+				E10580E02A4899B300F22ADC /* ZLEditImageViewController + Constants.swift in Sources */,
 				FDE1A559282E580900178B0F /* ZLImageEditorUIConfiguration.swift in Sources */,
 				FDE1A561282E61B500178B0F /* ZLEnlargeButton.swift in Sources */,
 				FDE1A55B282E58E700178B0F /* ZLImageEditorUIConfiguration+Chaining.swift in Sources */,

@@ -31,28 +31,28 @@ class ZLEditToolCell: UICollectionViewCell {
         didSet {
             switch toolType {
             case .draw:
-                icon.image = getImage("zl_drawLine")
-                icon.highlightedImage = getImage("zl_drawLine_selected")
+                icon.image = getImage("zl_drawLine")?.withTintColor(.init(white: 176/255, alpha: 1.0))
+                icon.highlightedImage = getImage("zl_drawLine_selected")?.withTintColor(.zl.editDoneBtnBgColor)
             case .clip:
-                icon.image = getImage("zl_clip")
-                icon.highlightedImage = getImage("zl_clip")
+                icon.image = getImage("zl_clip")?.withTintColor(.init(white: 176/255, alpha: 1.0))
+                icon.highlightedImage = getImage("zl_clip")?.withTintColor(.zl.editDoneBtnTitleColor)
             case .imageSticker:
-                icon.image = getImage("zl_imageSticker")
-                icon.highlightedImage = getImage("zl_imageSticker")
+                icon.image = getImage("zl_imageSticker")?.withTintColor(.init(white: 176/255, alpha: 1.0))
+                icon.highlightedImage = getImage("zl_imageSticker")?.withTintColor(.zl.editDoneBtnBgColor)
             case .textSticker:
-                icon.image = getImage("zl_textSticker")
-                icon.highlightedImage = getImage("zl_textSticker")
+                icon.image = getImage("zl_textSticker")?.withTintColor(.init(white: 176/255, alpha: 1.0))
+                icon.highlightedImage = getImage("zl_textSticker")?.withTintColor(.zl.editDoneBtnBgColor)
             case .filter:
-                icon.image = getImage("zl_filter")
-                icon.highlightedImage = getImage("zl_filter_selected")
+                icon.image = getImage("zl_filter")?.withTintColor(.init(white: 176/255, alpha: 1.0))
+                icon.highlightedImage = getImage("zl_filter_selected")?.withTintColor(.zl.editDoneBtnBgColor)
             case .adjust:
-                icon.image = getImage("zl_adjust")
-                icon.highlightedImage = getImage("zl_adjust_selected")
+                icon.image = getImage("zl_adjust")?.withTintColor(.init(white: 176/255, alpha: 1.0))
+                icon.highlightedImage = getImage("zl_adjust_selected")?.withTintColor(.zl.editDoneBtnBgColor)
             }
-            if let color = UIColor.zl.toolIconHighlightedColor {
-                icon.highlightedImage = icon.highlightedImage?
-                    .zl.fillColor(color)
-            }
+//            if let color = UIColor.zl.toolIconHighlightedColor {
+//                icon.highlightedImage = icon.highlightedImage?
+//                    .zl.fillColor(color)
+//            }
         }
     }
     

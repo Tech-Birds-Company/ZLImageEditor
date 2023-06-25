@@ -3,22 +3,6 @@ import SnapKit
 
 open class ZLEditImageViewController: UIViewController {
 
-    struct Constants {
-        static let maxDrawLineImageWidth: CGFloat = 600
-
-        static let shadowColorFrom = UIColor.black.withAlphaComponent(0.35).cgColor
-
-        static let shadowColorTo = UIColor.clear.cgColor
-
-        static let drawColViewH: CGFloat = 50
-
-        static let filterColViewH: CGFloat = 80
-
-        static let adjustColViewH: CGFloat = 60
-
-        static let ashbinSize = CGSize(width: 160, height: 80)
-    }
-    
     open lazy var mainScrollView: UIScrollView = {
         let view = UIScrollView()
         view.backgroundColor = .init(white: 245/255, alpha: 1.0)
@@ -81,7 +65,7 @@ open class ZLEditImageViewController: UIViewController {
         return btn
     }()
 
-    private lazy var revokeRedoContainer: UIView = {
+    lazy var revokeRedoContainer: UIView = {
         let btnsView = UIView()
         btnsView.backgroundColor = .zl.editDoneBtnBgColor
         btnsView.isHidden = true
@@ -543,141 +527,13 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     func setupUI() {
-
-        self.view.addSubview(headerView) { make in
-            make.top.leading.trailing.equalToSuperview()
-            let window = UIApplication.shared.keyWindow
-            let topSafeArea = window?.safeAreaInsets.top ?? 0.0
-            make.height.equalTo(60 + topSafeArea)
-        }
-        headerView.addSubview(cancelBtn) { make in
-            make.leading.equalToSuperview().offset(24)
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
-            make.bottom.equalToSuperview()
-        }
-        
-        self.view.addSubview(mainScrollView) { make in
-            make.top.equalTo(headerView.snp.bottom)
-            make.leading.trailing.equalToSuperview()
-        }
-
-        mainScrollView.addSubview(containerView)
-        containerView.addSubview(imageView)
-        containerView.addSubview(drawingImageView)
-        containerView.addSubview(stickersContainer)
-        
-        self.view.addSubview(bottomToolsContainerView) { make in
-            make.top.equalTo(mainScrollView.snp.bottom)
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
-        bottomToolsContainerView.addSubview(editToolCollectionView) { make in
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.top.equalToSuperview().offset(16)
-            make.height.equalTo(50)
-        }
-        bottomToolsContainerView.addSubview(doneBtn) { make in
-            make.top.equalTo(self.editToolCollectionView.snp.bottom).offset(16)
-            make.horizontalEdges.equalToSuperview().inset(16)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).inset(16)
-            make.height.equalTo(52)
-        }
-        
-        if tools.contains(.draw) {
-            self.view.addSubview(self.drawColorCollectionView) { make in
-                make.leading.equalToSuperview().inset(16)
-                make.bottom.equalTo(self.bottomToolsContainerView.snp.top).offset(-8)
-                make.height.equalTo(Constants.drawColViewH)
-            }
-            self.revokeRedoContainer.addSubview(self.revokeBtn) { make in
-                make.leading.equalToSuperview().offset(4)
-                make.leading.top.bottom.equalToSuperview()
-                make.width.equalTo(30)
-            }
-            self.revokeRedoContainer.addSubview(self.redoBtn) { make in
-                make.trailing.equalToSuperview().inset(4)
-                make.top.bottom.equalToSuperview()
-                make.width.equalTo(30)
-                make.leading.equalTo(self.revokeBtn.snp.trailing)
-            }
-
-            self.view.addSubview(self.revokeRedoContainer) { make in
-                make.height.equalTo(Constants.drawColViewH)
-                make.leading.equalTo(self.drawColorCollectionView.snp.trailing).offset(8)
-                make.trailing.equalToSuperview().inset(16)
-                make.centerY.equalTo(self.drawColorCollectionView.snp.centerY)
-            }
-        }
-        
-        if tools.contains(.filter) {
-            self.view.addSubview(self.filterCollectionView) { make in
-                make.horizontalEdges.equalToSuperview().inset(16)
-                make.bottom.equalTo(self.bottomToolsContainerView.snp.top).offset(-8)
-                make.height.equalTo(Constants.filterColViewH)
-            }
-        }
-        
-        if tools.contains(.adjust) {
-            editImage = editImage.zl.adjust(brightness: brightness, contrast: contrast, saturation: saturation) ?? editImage
-
-            self.view.addSubview(self.adjustCollectionView) { make in
-                make.horizontalEdges.equalToSuperview().inset(16)
-                make.bottom.equalTo(self.bottomToolsContainerView.snp.top).offset(-8)
-                make.height.equalTo(Constants.adjustColViewH)
-            }
-
-            if let selectedAdjustTool = selectedAdjustTool {
-                changeAdjustTool(selectedAdjustTool)
-            }
-
-            view.addSubview(adjustSlider) { make in
-                make.width.equalTo(60)
-                make.height.equalTo(200)
-                make.trailing.equalToSuperview()
-                make.centerY.equalToSuperview()
-            }
-        }
-        
-        view.addSubview(ashbinView)
-        ashbinView.addSubview(ashbinImgView)
-        
-        let asbinTipLabel = UILabel(
-            frame: CGRect(
-                x: 0,
-                y: Constants.ashbinSize.height - 34,
-                width: Constants.ashbinSize.width,
-                height: 34
-            )
-        )
-        asbinTipLabel.font = UIFont.systemFont(ofSize: 12)
-        asbinTipLabel.textAlignment = .center
-        asbinTipLabel.textColor = .white
-        asbinTipLabel.text = localLanguageTextValue(.textStickerRemoveTips)
-        asbinTipLabel.numberOfLines = 2
-        asbinTipLabel.lineBreakMode = .byCharWrapping
-        ashbinView.addSubview(asbinTipLabel)
-        
-        if tools.contains(.imageSticker) {
-            ZLImageEditorConfiguration.default().imageStickerContainerView?.hideBlock = { [weak self] in
-                self?.imageStickerContainerIsHidden = true
-            }
-            
-            ZLImageEditorConfiguration.default().imageStickerContainerView?.selectImageBlock = { [weak self] image in
-                self?.addImageStickerView(image)
-            }
-        }
-
-        if tools.contains(.textSticker) {
-            ZLImageEditorConfiguration.default().fontChooserContainerView?.hideBlock = { [weak self] in
-                self?.fontChooserContainerIsHidden = true
-            }
-
-            ZLImageEditorConfiguration.default().fontChooserContainerView?.selectFontBlock = { [weak self] font in
-                self?.showInputTextVC(font: font) { [weak self] text, font, textColor, bgColor in
-                    self?.addTextStickersView(text, textColor: textColor, font: font, bgColor: bgColor)
-                }
-            }
-        }
+        self.setupMainUI()
+        self.setupDrawToolsUI()
+        self.setupFilterToolsUI()
+        self.setupAdjustToolsUI()
+        self.setupAshbinViewUI()
+        self.setupImageSticker()
+        self.setupTextSticker()
         
         panGes = UIPanGestureRecognizer(target: self, action: #selector(drawAction(_:)))
         panGes.maximumNumberOfTouches = 1
@@ -791,104 +647,6 @@ open class ZLEditImageViewController: UIViewController {
         hasAdjustedImage = false
     }
     
-    func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, bgColor: UIColor? = nil, completion: @escaping (String, UIFont, UIColor, UIColor) -> Void) {
-        var bgImage: UIImage?
-        autoreleasepool {
-            // Calculate image displayed frame on the screen.
-            var r = mainScrollView.convert(view.frame, to: containerView)
-            r.origin.x += mainScrollView.contentOffset.x / mainScrollView.zoomScale
-            r.origin.y += mainScrollView.contentOffset.y / mainScrollView.zoomScale
-            let scale = imageSize.width / imageView.frame.width
-            r.origin.x *= scale
-            r.origin.y *= scale
-            r.size.width *= scale
-            r.size.height *= scale
-            
-            let isCircle = selectRatio?.isCircle ?? false
-            bgImage = buildImage()
-                .zl.clipImage(angle: angle, editRect: editRect, isCircle: isCircle)?
-                .zl.clipImage(angle: 0, editRect: r, isCircle: isCircle)
-        }
-        
-        let vc = ZLInputTextViewController(image: bgImage, text: text, font: font, textColor: textColor, bgColor: bgColor)
-        
-        vc.endInput = { text, font, textColor, bgColor in
-            completion(text, font, textColor, bgColor)
-        }
-        
-        vc.modalPresentationStyle = .fullScreen
-        showDetailViewController(vc, sender: nil)
-    }
-    
-    func getStickerOriginFrame(_ size: CGSize) -> CGRect {
-        let scale = mainScrollView.zoomScale
-        // Calculate the display rect of container view.
-        let x = (mainScrollView.contentOffset.x - containerView.frame.minX) / scale
-        let y = (mainScrollView.contentOffset.y - containerView.frame.minY) / scale
-        let w = view.frame.width / scale
-        let h = view.frame.height / scale
-        // Convert to text stickers container view.
-        let r = containerView.convert(CGRect(x: x, y: y, width: w, height: h), to: stickersContainer)
-        let originFrame = CGRect(x: r.minX + (r.width - size.width) / 2, y: r.minY + (r.height - size.height) / 2, width: size.width, height: size.height)
-        return originFrame
-    }
-    
-    /// Add image sticker
-    func addImageStickerView(_ image: UIImage) {
-        let scale = mainScrollView.zoomScale
-        let size = ZLImageStickerView.calculateSize(image: image, width: view.frame.width)
-        let originFrame = getStickerOriginFrame(size)
-        
-        let imageSticker = ZLImageStickerView(image: image, originScale: 1 / scale, originAngle: -angle, originFrame: originFrame)
-        stickersContainer.addSubview(imageSticker)
-        imageSticker.frame = originFrame
-        view.layoutIfNeeded()
-        
-        configImageSticker(imageSticker)
-    }
-    
-    /// Add text sticker
-    func addTextStickersView(_ text: String, textColor: UIColor, font: UIFont? = nil, bgColor: UIColor) {
-        guard !text.isEmpty else { return }
-        let scale = mainScrollView.zoomScale
-        let size = ZLTextStickerView.calculateSize(text: text, width: view.frame.width, font: font)
-        let originFrame = getStickerOriginFrame(size)
-        
-        let textSticker = ZLTextStickerView(text: text, textColor: textColor, font: font, bgColor: bgColor, originScale: 1 / scale, originAngle: -angle, originFrame: originFrame)
-        stickersContainer.addSubview(textSticker)
-        textSticker.frame = originFrame
-        
-        configTextSticker(textSticker)
-    }
-    
-    func configTextSticker(_ textSticker: ZLTextStickerView) {
-        textSticker.delegate = self
-        mainScrollView.pinchGestureRecognizer?.require(toFail: textSticker.pinchGes)
-        mainScrollView.panGestureRecognizer.require(toFail: textSticker.panGes)
-        panGes.require(toFail: textSticker.panGes)
-    }
-    
-    func configImageSticker(_ imageSticker: ZLImageStickerView) {
-        imageSticker.delegate = self
-        mainScrollView.pinchGestureRecognizer?.require(toFail: imageSticker.pinchGes)
-        mainScrollView.panGestureRecognizer.require(toFail: imageSticker.panGes)
-        panGes.require(toFail: imageSticker.panGes)
-    }
-    
-    func reCalculateStickersFrame(_ oldSize: CGSize, _ oldAngle: CGFloat, _ newAngle: CGFloat) {
-        let currSize = stickersContainer.frame.size
-        let scale: CGFloat
-        if Int(newAngle - oldAngle) % 180 == 0 {
-            scale = currSize.width / oldSize.width
-        } else {
-            scale = currSize.height / oldSize.width
-        }
-        
-        stickersContainer.subviews.forEach { view in
-            (view as? ZLStickerViewAdditional)?.addScale(scale)
-        }
-    }
-    
     func drawLine() {
         let originalRatio = min(mainScrollView.frame.width / originalImage.size.width, mainScrollView.frame.height / originalImage.size.height)
         let ratio = min(mainScrollView.frame.width / editRect.width, mainScrollView.frame.height / editRect.height)
@@ -955,188 +713,155 @@ open class ZLEditImageViewController: UIViewController {
     }
 }
 
-// MARK: - buttons actions
-extension ZLEditImageViewController {
-    @objc func cancelBtnClick() {
-        dismiss(animated: animateDismiss, completion: nil)
-    }
+// MARK: - setup UI
+private extension ZLEditImageViewController {
 
-    func drawBtnClick() {
-        let isSelected = selectedTool != .draw
-        if isSelected {
-            selectedTool = .draw
-        } else {
-            selectedTool = nil
+    func setupMainUI() {
+        self.view.addSubview(headerView) { make in
+            make.top.leading.trailing.equalToSuperview()
+            let window = UIApplication.shared.keyWindow
+            let topSafeArea = window?.safeAreaInsets.top ?? 0.0
+            make.height.equalTo(60 + topSafeArea)
         }
-        drawColorCollectionView.isHidden = !isSelected
-        self.revokeRedoContainer.isHidden = !isSelected
-        revokeBtn.isEnabled = !drawPaths.isEmpty
-        redoBtn.isEnabled = drawPaths.count != redoDrawPaths.count
-        filterCollectionView.isHidden = true
-        adjustCollectionView.isHidden = true
-        self.adjustSlider.isHidden = true
-    }
-
-    func clipBtnClick() {
-        var currentEditImage = editImage
-        autoreleasepool {
-            currentEditImage = buildImage()
+        headerView.addSubview(cancelBtn) { make in
+            make.leading.equalToSuperview().offset(24)
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            make.bottom.equalToSuperview()
         }
 
-        let vc = ZLClipImageViewController(image: currentEditImage, editRect: editRect, angle: angle, selectRatio: selectRatio)
-        let rect = mainScrollView.convert(containerView.frame, to: view)
-        vc.presentAnimateFrame = rect
-        vc.presentAnimateImage = currentEditImage.zl.clipImage(angle: angle, editRect: editRect, isCircle: selectRatio?.isCircle ?? false)
-        vc.modalPresentationStyle = .fullScreen
+        self.view.addSubview(mainScrollView) { make in
+            make.top.equalTo(headerView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+        }
 
-        vc.clipDoneBlock = { [weak self] angle, editFrame, selectRatio in
-            guard let `self` = self else { return }
-            let oldAngle = self.angle
-            let oldContainerSize = self.stickersContainer.frame.size
-            if self.angle != angle {
-                self.angle = angle
-                self.rotationImageView()
+        mainScrollView.addSubview(containerView)
+        containerView.addSubview(imageView)
+        containerView.addSubview(drawingImageView)
+        containerView.addSubview(stickersContainer)
+
+        self.view.addSubview(bottomToolsContainerView) { make in
+            make.top.equalTo(mainScrollView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        bottomToolsContainerView.addSubview(editToolCollectionView) { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.equalToSuperview().offset(16)
+            make.height.equalTo(50)
+        }
+        bottomToolsContainerView.addSubview(doneBtn) { make in
+            make.top.equalTo(self.editToolCollectionView.snp.bottom).offset(16)
+            make.horizontalEdges.equalToSuperview().inset(16)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).inset(16)
+            make.height.equalTo(52)
+        }
+    }
+
+    func setupTextSticker() {
+        if tools.contains(.textSticker) {
+            ZLImageEditorConfiguration.default().fontChooserContainerView?.hideBlock = { [weak self] in
+                self?.fontChooserContainerIsHidden = true
             }
-            self.editRect = editFrame
-            self.selectRatio = selectRatio
-            self.resetContainerViewFrame()
-            self.reCalculateStickersFrame(oldContainerSize, oldAngle, angle)
-        }
 
-        vc.cancelClipBlock = { [weak self] () in
-            self?.resetContainerViewFrame()
-        }
-
-        present(vc, animated: false) {
-            self.mainScrollView.alpha = 0
-            self.headerView.alpha = 0
-            self.bottomToolsContainerView.alpha = 0
-            self.self.adjustSlider.alpha = 0
-        }
-    }
-
-    func imageStickerBtnClick() {
-        ZLImageEditorConfiguration.default().imageStickerContainerView?.show(in: view)
-        imageStickerContainerIsHidden = false
-    }
-
-    func textStickerBtnClick() {
-        if let fontChooserContainerView = ZLImageEditorConfiguration.default().fontChooserContainerView {
-            fontChooserContainerView.show(in: view)
-            fontChooserContainerIsHidden = false
-        } else {
-            showInputTextVC { [weak self] text, _, textColor, bgColor in
-                self?.addTextStickersView(text, textColor: textColor, bgColor: bgColor)
-            }
-        }
-    }
-
-    func filterBtnClick() {
-        let isSelected = selectedTool != .filter
-        if isSelected {
-            selectedTool = .filter
-        } else {
-            selectedTool = nil
-        }
-
-        drawColorCollectionView.isHidden = true
-        self.revokeRedoContainer.isHidden = true
-        filterCollectionView.isHidden = !isSelected
-        adjustCollectionView.isHidden = true
-        self.adjustSlider.isHidden = true
-    }
-
-    func adjustBtnClick() {
-        let isSelected = selectedTool != .adjust
-        if isSelected {
-            selectedTool = .adjust
-        } else {
-            selectedTool = nil
-        }
-
-        drawColorCollectionView.isHidden = true
-        self.revokeRedoContainer.isHidden = true
-        filterCollectionView.isHidden = true
-        adjustCollectionView.isHidden = !isSelected
-        self.adjustSlider.isHidden = !isSelected
-
-        self.editImageAdjustRef = self.editImageWithoutAdjust
-    }
-
-    @objc func doneBtnClick() {
-        var textStickers: [(ZLTextStickerState, Int)] = []
-        var imageStickers: [(ZLImageStickerState, Int)] = []
-        for (index, view) in stickersContainer.subviews.enumerated() {
-            if let ts = view as? ZLTextStickerView, let _ = ts.label.text {
-                textStickers.append((ts.state, index))
-            } else if let ts = view as? ZLImageStickerView {
-                imageStickers.append((ts.state, index))
-            }
-        }
-
-        var hasEdit = true
-        if drawPaths.isEmpty, editRect.size == imageSize, angle == 0, imageStickers.isEmpty, textStickers.isEmpty, currentFilter.applier == nil, brightness == 0, contrast == 0, saturation == 0 {
-            hasEdit = false
-        }
-
-        var resImage = originalImage
-        var editModel: ZLEditImageModel?
-        if hasEdit {
-            autoreleasepool {
-                let hud = ZLProgressHUD(style: ZLImageEditorUIConfiguration.default().hudStyle)
-                hud.show()
-
-                resImage = buildImage()
-                resImage = resImage.zl.clipImage(angle: angle, editRect: editRect, isCircle: selectRatio?.isCircle ?? false) ?? resImage
-                if let oriDataSize = originalImage.jpegData(compressionQuality: 1)?.count {
-                    resImage = resImage.zl.compress(to: oriDataSize)
+            ZLImageEditorConfiguration.default().fontChooserContainerView?.selectFontBlock = { [weak self] font in
+                self?.showInputTextVC(font: font) { [weak self] text, font, textColor, bgColor in
+                    self?.addTextStickersView(text, textColor: textColor, font: font, bgColor: bgColor)
                 }
+            }
+        }
+    }
 
-                hud.hide()
+    func setupImageSticker() {
+        if tools.contains(.imageSticker) {
+            ZLImageEditorConfiguration.default().imageStickerContainerView?.hideBlock = { [weak self] in
+                self?.imageStickerContainerIsHidden = true
             }
 
-            editModel = ZLEditImageModel(
-                drawPaths: drawPaths,
-                editRect: editRect,
-                angle: angle,
-                brightness: brightness,
-                contrast: contrast,
-                saturation: saturation,
-                selectRatio: selectRatio,
-                selectFilter: currentFilter,
-                textStickers: textStickers,
-                imageStickers: imageStickers
+            ZLImageEditorConfiguration.default().imageStickerContainerView?.selectImageBlock = { [weak self] image in
+                self?.addImageStickerView(image)
+            }
+        }
+    }
+
+    func setupDrawToolsUI() {
+        if tools.contains(.draw) {
+            self.view.addSubview(self.drawColorCollectionView) { make in
+                make.leading.equalToSuperview().inset(16)
+                make.bottom.equalTo(self.bottomToolsContainerView.snp.top).offset(-8)
+                make.height.equalTo(Constants.drawColViewH)
+            }
+            self.revokeRedoContainer.addSubview(self.revokeBtn) { make in
+                make.leading.equalToSuperview().offset(4)
+                make.leading.top.bottom.equalToSuperview()
+                make.width.equalTo(30)
+            }
+            self.revokeRedoContainer.addSubview(self.redoBtn) { make in
+                make.trailing.equalToSuperview().inset(4)
+                make.top.bottom.equalToSuperview()
+                make.width.equalTo(30)
+                make.leading.equalTo(self.revokeBtn.snp.trailing)
+            }
+
+            self.view.addSubview(self.revokeRedoContainer) { make in
+                make.height.equalTo(Constants.drawColViewH)
+                make.leading.equalTo(self.drawColorCollectionView.snp.trailing).offset(8)
+                make.trailing.equalToSuperview().inset(16)
+                make.centerY.equalTo(self.drawColorCollectionView.snp.centerY)
+            }
+        }
+    }
+
+    func setupFilterToolsUI() {
+        if tools.contains(.filter) {
+            self.view.addSubview(self.filterCollectionView) { make in
+                make.horizontalEdges.equalToSuperview().inset(16)
+                make.bottom.equalTo(self.bottomToolsContainerView.snp.top).offset(-8)
+                make.height.equalTo(Constants.filterColViewH)
+            }
+        }
+    }
+
+    func setupAdjustToolsUI() {
+        if tools.contains(.adjust) {
+            editImage = editImage.zl.adjust(brightness: brightness, contrast: contrast, saturation: saturation) ?? editImage
+
+            self.view.addSubview(self.adjustCollectionView) { make in
+                make.horizontalEdges.equalToSuperview().inset(16)
+                make.bottom.equalTo(self.bottomToolsContainerView.snp.top).offset(-8)
+                make.height.equalTo(Constants.adjustColViewH)
+            }
+
+            if let selectedAdjustTool = selectedAdjustTool {
+                changeAdjustTool(selectedAdjustTool)
+            }
+
+            view.addSubview(adjustSlider) { make in
+                make.width.equalTo(60)
+                make.height.equalTo(200)
+                make.trailing.equalToSuperview()
+                make.centerY.equalToSuperview()
+            }
+        }
+    }
+
+    func setupAshbinViewUI() {
+        view.addSubview(ashbinView)
+        ashbinView.addSubview(ashbinImgView)
+
+        let asbinTipLabel = UILabel(
+            frame: CGRect(
+                x: 0,
+                y: Constants.ashbinSize.height - 34,
+                width: Constants.ashbinSize.width,
+                height: 34
             )
-        }
-
-        dismiss(animated: animateDismiss) {
-            self.editFinishBlock?(resImage, editModel)
-        }
+        )
+        asbinTipLabel.font = UIFont.systemFont(ofSize: 12)
+        asbinTipLabel.textAlignment = .center
+        asbinTipLabel.textColor = .white
+        asbinTipLabel.text = localLanguageTextValue(.textStickerRemoveTips)
+        asbinTipLabel.numberOfLines = 2
+        asbinTipLabel.lineBreakMode = .byCharWrapping
+        ashbinView.addSubview(asbinTipLabel)
     }
-
-    @objc func revokeBtnClick() {
-        if selectedTool == .draw {
-            guard !drawPaths.isEmpty else {
-                return
-            }
-            drawPaths.removeLast()
-            revokeBtn.isEnabled = !drawPaths.isEmpty
-            self.redoBtn.isEnabled = drawPaths.count != redoDrawPaths.count
-            drawLine()
-        }
-    }
-
-    @objc func redoBtnClick() {
-        if selectedTool == .draw {
-            guard drawPaths.count < redoDrawPaths.count else {
-                return
-            }
-            let path = redoDrawPaths[drawPaths.count]
-            drawPaths.append(path)
-            revokeBtn.isEnabled = !drawPaths.isEmpty
-            self.redoBtn.isEnabled = drawPaths.count != redoDrawPaths.count
-            drawLine()
-        }
-    }
-
 }

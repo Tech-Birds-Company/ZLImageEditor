@@ -524,7 +524,7 @@ class ZLClipImageViewController: UIViewController {
         dismissAnimateFromRect = clipBoxFrame
         dismissAnimateImage = image.clipImage
         clipDoneBlock?(angle, image.editRect, selectedRatio)
-        dismiss(animated: animateDismiss, completion: nil)
+        dismiss(animated: false, completion: nil)
     }
     
     @objc func rotateBtnClick() {

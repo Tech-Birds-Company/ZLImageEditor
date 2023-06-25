@@ -10,6 +10,8 @@
 		E10580DE2A48977C00F22ADC /* ZLEditImageViewController+ButtonsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10580DD2A48977C00F22ADC /* ZLEditImageViewController+ButtonsAction.swift */; };
 		E10580E02A4899B300F22ADC /* ZLEditImageViewController + Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10580DF2A4899B300F22ADC /* ZLEditImageViewController + Constants.swift */; };
 		E10580E22A489A3200F22ADC /* ZLEditImageViewController + StickersOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10580E12A489A3200F22ADC /* ZLEditImageViewController + StickersOperation.swift */; };
+		E10580E92A48AE9B00F22ADC /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = E10580E82A48AE9B00F22ADC /* SnapKit-Dynamic */; };
+		E10580EA2A48AEA200F22ADC /* SnapKit-Dynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = E10580E82A48AE9B00F22ADC /* SnapKit-Dynamic */; };
 		E17C8B642A26982F00C86D82 /* ZLEditImageViewController+UIGestureRecognizerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C8B632A26982F00C86D82 /* ZLEditImageViewController+UIGestureRecognizerDelegate.swift */; };
 		E17C8B662A26986900C86D82 /* ZLEditImageViewController+UIScrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C8B652A26986900C86D82 /* ZLEditImageViewController+UIScrollViewDelegate.swift */; };
 		E17C8B682A2698D100C86D82 /* ZLEditImageViewController + UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C8B672A2698D100C86D82 /* ZLEditImageViewController + UICollectionView.swift */; };
@@ -17,7 +19,6 @@
 		E17C8B6C2A26997400C86D82 /* ZLEditImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C8B6B2A26997400C86D82 /* ZLEditImageModel.swift */; };
 		E17C8B6E2A2699D600C86D82 /* ZLDrawPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C8B6D2A2699D600C86D82 /* ZLDrawPath.swift */; };
 		E17C8B742A26A0FF00C86D82 /* ImageStickerContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C8B732A26A0FF00C86D82 /* ImageStickerContainerView.swift */; };
-		E1D82EA32A378C1D00B40CDD /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E1D82EA22A378C1D00B40CDD /* SnapKit */; };
 		E1D82EA52A379E1900B40CDD /* UIApllication.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D82EA42A379E1900B40CDD /* UIApllication.swift */; };
 		E40208DC256B9BA60077F5DC /* ZLImageEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = E40208DA256B9BA60077F5DC /* ZLImageEditor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E40208EB256B9F9C0077F5DC /* ZLEditImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40208E4256B9F9C0077F5DC /* ZLEditImageViewController.swift */; };
@@ -49,6 +50,20 @@
 		FDE1A55D282E595C00178B0F /* UIColor+ZLImageEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1A55C282E595C00178B0F /* UIColor+ZLImageEditor.swift */; };
 		FDE1A561282E61B500178B0F /* ZLEnlargeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1A560282E61B500178B0F /* ZLEnlargeButton.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E10580EB2A48AEA200F22ADC /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E10580EA2A48AEA200F22ADC /* SnapKit-Dynamic in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		E10580DD2A48977C00F22ADC /* ZLEditImageViewController+ButtonsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZLEditImageViewController+ButtonsAction.swift"; sourceTree = "<group>"; };
@@ -100,7 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1D82EA32A378C1D00B40CDD /* SnapKit in Frameworks */,
+				E10580E92A48AE9B00F22ADC /* SnapKit-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,6 +232,7 @@
 				E40208D3256B9BA60077F5DC /* Sources */,
 				E40208D4256B9BA60077F5DC /* Frameworks */,
 				E40208D5256B9BA60077F5DC /* Resources */,
+				E10580EB2A48AEA200F22ADC /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -224,7 +240,7 @@
 			);
 			name = ZLImageEditor;
 			packageProductDependencies = (
-				E1D82EA22A378C1D00B40CDD /* SnapKit */,
+				E10580E82A48AE9B00F22ADC /* SnapKit-Dynamic */,
 			);
 			productName = ZLImageEditor;
 			productReference = E40208D7256B9BA60077F5DC /* ZLImageEditor.framework */;
@@ -254,7 +270,7 @@
 			);
 			mainGroup = E40208CD256B9BA60077F5DC;
 			packageReferences = (
-				E1D82EA12A378C1D00B40CDD /* XCRemoteSwiftPackageReference "SnapKit" */,
+				E10580E72A48AE9B00F22ADC /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = E40208D8256B9BA60077F5DC /* Products */;
 			projectDirPath = "";
@@ -526,7 +542,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E1D82EA12A378C1D00B40CDD /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+		E10580E72A48AE9B00F22ADC /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Tech-Birds-Company/SnapKit";
 			requirement = {
@@ -537,10 +553,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E1D82EA22A378C1D00B40CDD /* SnapKit */ = {
+		E10580E82A48AE9B00F22ADC /* SnapKit-Dynamic */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E1D82EA12A378C1D00B40CDD /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
+			package = E10580E72A48AE9B00F22ADC /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = "SnapKit-Dynamic";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

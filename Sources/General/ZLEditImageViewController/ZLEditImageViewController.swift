@@ -46,10 +46,9 @@ open class ZLEditImageViewController: UIViewController {
     
     open lazy var cancelBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(getImage("zl_retake"), for: .normal)
+        btn.setImage(getImage("zl_close")?.withTintColor(.zl.editDoneBtnBgColor), for: .normal)
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         btn.enlargeInset = 30
-        btn.backgroundColor = .black
         return btn
     }()
     
@@ -793,12 +792,12 @@ private extension ZLEditImageViewController {
             self.revokeRedoContainer.addSubview(self.revokeBtn) { make in
                 make.leading.equalToSuperview().offset(4)
                 make.leading.top.bottom.equalToSuperview()
-                make.width.equalTo(30)
+                make.width.equalTo(40)
             }
             self.revokeRedoContainer.addSubview(self.redoBtn) { make in
                 make.trailing.equalToSuperview().inset(4)
                 make.top.bottom.equalToSuperview()
-                make.width.equalTo(30)
+                make.width.equalTo(40)
                 make.leading.equalTo(self.revokeBtn.snp.trailing)
             }
 

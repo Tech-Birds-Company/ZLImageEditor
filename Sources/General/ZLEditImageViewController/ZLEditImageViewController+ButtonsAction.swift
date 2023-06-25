@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 // MARK: - buttons actions
 extension ZLEditImageViewController {
@@ -59,12 +60,18 @@ extension ZLEditImageViewController {
             self?.resetContainerViewFrame()
         }
 
-        present(vc, animated: false) {
-            self.mainScrollView.alpha = 0
-            self.headerView.alpha = 0
-            self.bottomToolsContainerView.alpha = 0
-            self.self.adjustSlider.alpha = 0
+        vc.modalPresentationStyle = .fullScreen
+        UIView.performWithoutAnimation {
+            showDetailViewController(vc, sender: self)
         }
+
+        // пришлось убрать потому что странной поведение когда открывается через swiftui
+//        present(vc, animated: false) {
+//            self.mainScrollView.alpha = 0
+//            self.headerView.alpha = 0
+//            self.bottomToolsContainerView.alpha = 0
+//            self.self.adjustSlider.alpha = 0
+//        }
     }
 
     func imageStickerBtnClick() {

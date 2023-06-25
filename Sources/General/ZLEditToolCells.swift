@@ -37,8 +37,8 @@ class ZLEditToolCell: UICollectionViewCell {
                 icon.image = getImage("zl_clip")?.withTintColor(.init(white: 176/255, alpha: 1.0))
                 icon.highlightedImage = getImage("zl_clip")?.withTintColor(.zl.editDoneBtnTitleColor)
             case .imageSticker:
-                icon.image = getImage("zl_imageSticker")?.withTintColor(.init(white: 176/255, alpha: 1.0))
-                icon.highlightedImage = getImage("zl_imageSticker")?.withTintColor(.zl.editDoneBtnBgColor)
+                icon.image = getImage("zl_cloths")?.withTintColor(.init(white: 176/255, alpha: 1.0))
+                icon.highlightedImage = getImage("zl_cloths")?.withTintColor(.zl.editDoneBtnBgColor)
             case .textSticker:
                 icon.image = getImage("zl_textSticker")?.withTintColor(.init(white: 176/255, alpha: 1.0))
                 icon.highlightedImage = getImage("zl_textSticker")?.withTintColor(.zl.editDoneBtnBgColor)

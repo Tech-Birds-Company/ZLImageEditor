@@ -53,7 +53,7 @@ open class ZLEditImageViewController: UIViewController {
         view.layer.shadowOffset = CGSize(width: 0 , height:0.5)
         return view
     }()
-     
+
     open lazy var bottomToolsContainerView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -80,18 +80,31 @@ open class ZLEditImageViewController: UIViewController {
         btn.layer.cornerRadius = ZLImageEditorLayout.bottomToolBtnCornerRadius
         return btn
     }()
-    
+
+    private lazy var revokeRedoContainer: UIView = {
+        let btnsView = UIView()
+        btnsView.backgroundColor = .zl.editDoneBtnBgColor
+        btnsView.isHidden = true
+        btnsView.layer.cornerRadius = 10
+        btnsView.layer.masksToBounds = true
+        return btnsView
+    }()
     open lazy var revokeBtn: UIButton = {
         let btn = UIButton(type: .custom)
         btn.setImage(getImage("zl_revoke_disable"), for: .disabled)
         btn.setImage(getImage("zl_revoke"), for: .normal)
         btn.isEnabled = false
-        btn.isHidden = true
         btn.addTarget(self, action: #selector(revokeBtnClick), for: .touchUpInside)
         return btn
     }()
-    
-    open var redoBtn: UIButton?
+    open lazy var redoBtn: UIButton = {
+        let btn = UIButton(type: .custom)
+        btn.setImage(getImage("zl_redo_disable"), for: .disabled)
+        btn.setImage(getImage("zl_redo"), for: .normal)
+        btn.isEnabled = false
+        btn.addTarget(self, action: #selector(redoBtnClick), for: .touchUpInside)
+        return btn
+    }()
     
     open lazy var editToolCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -105,16 +118,83 @@ open class ZLEditImageViewController: UIViewController {
         view.delegate = self
         view.dataSource = self
         view.showsHorizontalScrollIndicator = false
+        view.layer.cornerRadius = 10.0
+        view.layer.masksToBounds = true
         ZLEditToolCell.zl.register(view)
-        
         return view
     }()
     
-    open var drawColorCollectionView: UICollectionView?
+    open lazy var drawColorCollectionView: UICollectionView = {
+        let drawColorLayout = UICollectionViewFlowLayout()
+        let drawColorItemWidth: CGFloat = 30
+        drawColorLayout.itemSize = CGSize(width: drawColorItemWidth, height: drawColorItemWidth)
+        drawColorLayout.minimumLineSpacing = 15
+        drawColorLayout.minimumInteritemSpacing = 15
+        drawColorLayout.scrollDirection = .horizontal
+        let drawColorTopBottomInset = (Constants.drawColViewH - drawColorItemWidth) / 2
+        drawColorLayout.sectionInset = UIEdgeInsets(top: drawColorTopBottomInset, left: 8, bottom: drawColorTopBottomInset, right: 8)
+
+        let drawCV = UICollectionView(frame: .zero, collectionViewLayout: drawColorLayout)
+        drawCV.backgroundColor = .zl.editDoneBtnBgColor
+        drawCV.delegate = self
+        drawCV.dataSource = self
+        drawCV.isHidden = true
+        drawCV.showsHorizontalScrollIndicator = false
+        drawCV.layer.cornerRadius = 10.0
+        drawCV.layer.masksToBounds = true
+        ZLDrawColorCell.zl.register(drawCV)
+        return drawCV
+    }()
     
-    open var filterCollectionView: UICollectionView?
+    open lazy var filterCollectionView: UICollectionView = {
+        if let applier = currentFilter.applier {
+            let image = applier(originalImage)
+            editImage = image
+            editImageWithoutAdjust = image
+            filterImages[currentFilter.name] = image
+        }
+
+        let filterLayout = UICollectionViewFlowLayout()
+        filterLayout.itemSize = CGSize(width: Constants.filterColViewH - 20, height: Constants.filterColViewH)
+        filterLayout.minimumLineSpacing = 15
+        filterLayout.minimumInteritemSpacing = 15
+        filterLayout.scrollDirection = .horizontal
+        filterLayout.sectionInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+
+        let filterCV = UICollectionView(frame: .zero, collectionViewLayout: filterLayout)
+        filterCV.backgroundColor = .zl.editDoneBtnBgColor
+        filterCV.delegate = self
+        filterCV.dataSource = self
+        filterCV.isHidden = true
+        filterCV.showsHorizontalScrollIndicator = false
+        filterCV.layer.cornerRadius = 10.0
+        filterCV.layer.masksToBounds = true
+
+        ZLFilterImageCell.zl.register(filterCV)
+        return filterCV
+    }()
     
-    open var adjustCollectionView: UICollectionView?
+    open lazy var adjustCollectionView: UICollectionView = {
+        let adjustLayout = UICollectionViewFlowLayout()
+        adjustLayout.itemSize = CGSize(width: 80, height: Constants.adjustColViewH)
+        adjustLayout.minimumLineSpacing = 10
+        adjustLayout.minimumInteritemSpacing = 10
+        adjustLayout.scrollDirection = .horizontal
+        adjustLayout.sectionInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+
+        let adjustCV = UICollectionView(frame: .zero, collectionViewLayout: adjustLayout)
+
+        adjustCV.backgroundColor = .zl.editDoneBtnBgColor
+        adjustCV.delegate = self
+        adjustCV.dataSource = self
+        adjustCV.isHidden = true
+        adjustCV.showsHorizontalScrollIndicator = false
+        adjustCV.layer.cornerRadius = 10.0
+        adjustCV.layer.masksToBounds = true
+
+        ZLAdjustToolCell.zl.register(adjustCV)
+        return adjustCV
+    }()
     
     open lazy var ashbinView: UIView = {
         let view = UIView()
@@ -127,7 +207,18 @@ open class ZLEditImageViewController: UIViewController {
     
     open lazy var ashbinImgView = UIImageView(image: getImage("zl_ashbin"), highlightedImage: getImage("zl_ashbin_open"))
     
-    var adjustSlider: ZLAdjustSlider?
+    lazy var adjustSlider: ZLAdjustSlider = {
+        let slider = ZLAdjustSlider()
+        slider.beginAdjust = {}
+        slider.valueChanged = { [weak self] value in
+            self?.adjustValueChanged(value)
+        }
+        slider.endAdjust = { [weak self] in
+            self?.hasAdjustedImage = true
+        }
+        slider.isHidden = true
+        return slider
+    }()
     
     var animateDismiss = true
     
@@ -351,29 +442,12 @@ open class ZLEditImageViewController: UIViewController {
 
         resetContainerViewFrame()
         
-        if canRedo, let redoBtn = redoBtn {
+        if canRedo {
             redoBtn.frame = CGRect(x: view.zl.width - 15 - 35, y: 30, width: 35, height: 30)
             revokeBtn.frame = CGRect(x: redoBtn.zl.left - 10 - 35, y: 30, width: 35, height: 30)
         } else {
             revokeBtn.frame = CGRect(x: view.zl.width - 15 - 35, y: 30, width: 35, height: 30)
         }
-        drawColorCollectionView?.frame = CGRect(x: 20, y: 20, width: revokeBtn.zl.left - 20 - 10, height: Constants.drawColViewH)
-        
-        adjustCollectionView?.frame = CGRect(x: 20, y: 10, width: view.zl.width - 40, height: Constants.adjustColViewH)
-        if ZLImageEditorUIConfiguration.default().adjustSliderType == .vertical {
-            adjustSlider?.frame = CGRect(x: view.zl.width - 60, y: view.zl.height / 2 - 100, width: 60, height: 200)
-        } else {
-            let sliderHeight: CGFloat = 60
-            let sliderWidth = UIDevice.current.userInterfaceIdiom == .phone ? view.zl.width - 100 : view.zl.width / 2
-            adjustSlider?.frame = CGRect(
-                x: (view.zl.width - sliderWidth) / 2,
-                y: bottomToolsContainerView.zl.top - sliderHeight,
-                width: sliderWidth,
-                height: sliderHeight
-            )
-        }
-        
-        filterCollectionView?.frame = CGRect(x: 20, y: 0, width: view.zl.width - 40, height: Constants.filterColViewH)
         
         ashbinView.frame = CGRect(
             x: (view.zl.width - Constants.ashbinSize.width) / 2,
@@ -393,7 +467,7 @@ open class ZLEditImageViewController: UIViewController {
         }
         
         if let index = drawColors.firstIndex(where: { $0 == self.currentDrawColor }) {
-            drawColorCollectionView?.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
+            drawColorCollectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
         }
     }
 
@@ -417,10 +491,10 @@ open class ZLEditImageViewController: UIViewController {
             self.thumbnailFilterImages = ZLImageEditorConfiguration.default().filters.map { $0.applier?(thumbnailImage) ?? thumbnailImage }
             
             DispatchQueue.main.async {
-                self.filterCollectionView?.reloadData()
-                self.filterCollectionView?.performBatchUpdates {} completion: { _ in
+                self.filterCollectionView.reloadData()
+                self.filterCollectionView.performBatchUpdates {} completion: { _ in
                     if let index = ZLImageEditorConfiguration.default().filters.firstIndex(where: { $0 == self.currentFilter }) {
-                        self.filterCollectionView?.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
+                        self.filterCollectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
                     }
                 }
             }
@@ -470,7 +544,7 @@ open class ZLEditImageViewController: UIViewController {
     
     func setupUI() {
 
-        view.addSubview(headerView) { make in
+        self.view.addSubview(headerView) { make in
             make.top.leading.trailing.equalToSuperview()
             let window = UIApplication.shared.keyWindow
             let topSafeArea = window?.safeAreaInsets.top ?? 0.0
@@ -482,7 +556,7 @@ open class ZLEditImageViewController: UIViewController {
             make.bottom.equalToSuperview()
         }
         
-        view.addSubview(mainScrollView) { make in
+        self.view.addSubview(mainScrollView) { make in
             make.top.equalTo(headerView.snp.bottom)
             make.leading.trailing.equalToSuperview()
         }
@@ -492,117 +566,76 @@ open class ZLEditImageViewController: UIViewController {
         containerView.addSubview(drawingImageView)
         containerView.addSubview(stickersContainer)
         
-        view.addSubview(bottomToolsContainerView) { make in
+        self.view.addSubview(bottomToolsContainerView) { make in
             make.top.equalTo(mainScrollView.snp.bottom)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(250)
             make.bottom.equalToSuperview()
         }
         bottomToolsContainerView.addSubview(editToolCollectionView) { make in
             make.leading.trailing.equalToSuperview().inset(16)
-            make.top.equalToSuperview().offset(24)
-            make.height.equalTo(40)
+            make.top.equalToSuperview().offset(16)
+            make.height.equalTo(50)
         }
         bottomToolsContainerView.addSubview(doneBtn) { make in
+            make.top.equalTo(self.editToolCollectionView.snp.bottom).offset(16)
             make.horizontalEdges.equalToSuperview().inset(16)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).inset(16)
             make.height.equalTo(52)
         }
         
         if tools.contains(.draw) {
-            let drawColorLayout = UICollectionViewFlowLayout()
-            let drawColorItemWidth: CGFloat = 30
-            drawColorLayout.itemSize = CGSize(width: drawColorItemWidth, height: drawColorItemWidth)
-            drawColorLayout.minimumLineSpacing = 15
-            drawColorLayout.minimumInteritemSpacing = 15
-            drawColorLayout.scrollDirection = .horizontal
-            let drawColorTopBottomInset = (Constants.drawColViewH - drawColorItemWidth) / 2
-            drawColorLayout.sectionInset = UIEdgeInsets(top: drawColorTopBottomInset, left: 0, bottom: drawColorTopBottomInset, right: 0)
-            
-            let drawCV = UICollectionView(frame: .zero, collectionViewLayout: drawColorLayout)
-            drawCV.backgroundColor = .clear
-            drawCV.delegate = self
-            drawCV.dataSource = self
-            drawCV.isHidden = true
-            drawCV.showsHorizontalScrollIndicator = false
-            bottomToolsContainerView.addSubview(drawCV)
-            
-            ZLDrawColorCell.zl.register(drawCV)
-            drawColorCollectionView = drawCV
+            self.view.addSubview(self.drawColorCollectionView) { make in
+                make.leading.equalToSuperview().inset(16)
+                make.bottom.equalTo(self.bottomToolsContainerView.snp.top).offset(-8)
+                make.height.equalTo(Constants.drawColViewH)
+            }
+            self.revokeRedoContainer.addSubview(self.revokeBtn) { make in
+                make.leading.equalToSuperview().offset(4)
+                make.leading.top.bottom.equalToSuperview()
+                make.width.equalTo(30)
+            }
+            self.revokeRedoContainer.addSubview(self.redoBtn) { make in
+                make.trailing.equalToSuperview().inset(4)
+                make.top.bottom.equalToSuperview()
+                make.width.equalTo(30)
+                make.leading.equalTo(self.revokeBtn.snp.trailing)
+            }
+
+            self.view.addSubview(self.revokeRedoContainer) { make in
+                make.height.equalTo(Constants.drawColViewH)
+                make.leading.equalTo(self.drawColorCollectionView.snp.trailing).offset(8)
+                make.trailing.equalToSuperview().inset(16)
+                make.centerY.equalTo(self.drawColorCollectionView.snp.centerY)
+            }
         }
         
         if tools.contains(.filter) {
-            if let applier = currentFilter.applier {
-                let image = applier(originalImage)
-                editImage = image
-                editImageWithoutAdjust = image
-                filterImages[currentFilter.name] = image
+            self.view.addSubview(self.filterCollectionView) { make in
+                make.horizontalEdges.equalToSuperview().inset(16)
+                make.bottom.equalTo(self.bottomToolsContainerView.snp.top).offset(-8)
+                make.height.equalTo(Constants.filterColViewH)
             }
-            
-            let filterLayout = UICollectionViewFlowLayout()
-            filterLayout.itemSize = CGSize(width: Constants.filterColViewH - 20, height: Constants.filterColViewH)
-            filterLayout.minimumLineSpacing = 15
-            filterLayout.minimumInteritemSpacing = 15
-            filterLayout.scrollDirection = .horizontal
-            
-            let filterCV = UICollectionView(frame: .zero, collectionViewLayout: filterLayout)
-            filterCV.backgroundColor = .clear
-            filterCV.delegate = self
-            filterCV.dataSource = self
-            filterCV.isHidden = true
-            filterCV.showsHorizontalScrollIndicator = false
-            bottomToolsContainerView.addSubview(filterCV)
-            
-            ZLFilterImageCell.zl.register(filterCV)
-            filterCollectionView = filterCV
         }
         
         if tools.contains(.adjust) {
             editImage = editImage.zl.adjust(brightness: brightness, contrast: contrast, saturation: saturation) ?? editImage
-            
-            let adjustLayout = UICollectionViewFlowLayout()
-            adjustLayout.itemSize = CGSize(width: Constants.adjustColViewH, height: Constants.adjustColViewH)
-            adjustLayout.minimumLineSpacing = 10
-            adjustLayout.minimumInteritemSpacing = 10
-            adjustLayout.scrollDirection = .horizontal
-            
-            let adjustCV = UICollectionView(frame: .zero, collectionViewLayout: adjustLayout)
-            
-            adjustCV.backgroundColor = .clear
-            adjustCV.delegate = self
-            adjustCV.dataSource = self
-            adjustCV.isHidden = true
-            adjustCV.showsHorizontalScrollIndicator = false
-            bottomToolsContainerView.addSubview(adjustCV)
-            
-            ZLAdjustToolCell.zl.register(adjustCV)
-            adjustCollectionView = adjustCV
-            
-            adjustSlider = ZLAdjustSlider()
+
+            self.view.addSubview(self.adjustCollectionView) { make in
+                make.horizontalEdges.equalToSuperview().inset(16)
+                make.bottom.equalTo(self.bottomToolsContainerView.snp.top).offset(-8)
+                make.height.equalTo(Constants.adjustColViewH)
+            }
+
             if let selectedAdjustTool = selectedAdjustTool {
                 changeAdjustTool(selectedAdjustTool)
             }
-            adjustSlider?.beginAdjust = {}
-            adjustSlider?.valueChanged = { [weak self] value in
-                self?.adjustValueChanged(value)
+
+            view.addSubview(adjustSlider) { make in
+                make.width.equalTo(60)
+                make.height.equalTo(200)
+                make.trailing.equalToSuperview()
+                make.centerY.equalToSuperview()
             }
-            adjustSlider?.endAdjust = { [weak self] in
-                self?.hasAdjustedImage = true
-            }
-            adjustSlider?.isHidden = true
-            view.addSubview(adjustSlider!)
-        }
-        
-        bottomToolsContainerView.addSubview(revokeBtn)
-        if canRedo {
-            let btn = UIButton(type: .custom)
-            btn.setImage(getImage("zl_redo_disable"), for: .disabled)
-            btn.setImage(getImage("zl_redo"), for: .normal)
-            btn.isEnabled = false
-            btn.isHidden = true
-            btn.addTarget(self, action: #selector(redoBtnClick), for: .touchUpInside)
-            bottomToolsContainerView.addSubview(btn)
-            redoBtn = btn
         }
         
         view.addSubview(ashbinView)
@@ -677,11 +710,11 @@ open class ZLEditImageViewController: UIViewController {
         
         switch tool {
         case .brightness:
-            adjustSlider?.value = brightness
+            self.adjustSlider.value = brightness
         case .contrast:
-            adjustSlider?.value = contrast
+            self.adjustSlider.value = contrast
         case .saturation:
-            adjustSlider?.value = saturation
+            self.adjustSlider.value = saturation
         }
     }
     
@@ -715,7 +748,7 @@ open class ZLEditImageViewController: UIViewController {
                 drawLine()
             } else if pan.state == .cancelled || pan.state == .ended {
                 revokeBtn.isEnabled = !drawPaths.isEmpty
-                redoBtn?.isEnabled = false
+                self.redoBtn.isEnabled = false
             }
         }
     }
@@ -917,7 +950,7 @@ open class ZLEditImageViewController: UIViewController {
         UIView.animate(withDuration: 0.1) {
             self.headerView.alpha = 1
             self.bottomToolsContainerView.alpha = 1
-            self.adjustSlider?.alpha = 1
+            self.self.adjustSlider.alpha = 1
         }
     }
 }
@@ -935,14 +968,13 @@ extension ZLEditImageViewController {
         } else {
             selectedTool = nil
         }
-        drawColorCollectionView?.isHidden = !isSelected
-        revokeBtn.isHidden = !isSelected
+        drawColorCollectionView.isHidden = !isSelected
+        self.revokeRedoContainer.isHidden = !isSelected
         revokeBtn.isEnabled = !drawPaths.isEmpty
-        redoBtn?.isHidden = !isSelected
-        redoBtn?.isEnabled = drawPaths.count != redoDrawPaths.count
-        filterCollectionView?.isHidden = true
-        adjustCollectionView?.isHidden = true
-        adjustSlider?.isHidden = true
+        redoBtn.isEnabled = drawPaths.count != redoDrawPaths.count
+        filterCollectionView.isHidden = true
+        adjustCollectionView.isHidden = true
+        self.adjustSlider.isHidden = true
     }
 
     func clipBtnClick() {
@@ -979,7 +1011,7 @@ extension ZLEditImageViewController {
             self.mainScrollView.alpha = 0
             self.headerView.alpha = 0
             self.bottomToolsContainerView.alpha = 0
-            self.adjustSlider?.alpha = 0
+            self.self.adjustSlider.alpha = 0
         }
     }
 
@@ -1007,12 +1039,11 @@ extension ZLEditImageViewController {
             selectedTool = nil
         }
 
-        drawColorCollectionView?.isHidden = true
-        revokeBtn.isHidden = true
-        redoBtn?.isHidden = true
-        filterCollectionView?.isHidden = !isSelected
-        adjustCollectionView?.isHidden = true
-        adjustSlider?.isHidden = true
+        drawColorCollectionView.isHidden = true
+        self.revokeRedoContainer.isHidden = true
+        filterCollectionView.isHidden = !isSelected
+        adjustCollectionView.isHidden = true
+        self.adjustSlider.isHidden = true
     }
 
     func adjustBtnClick() {
@@ -1023,12 +1054,11 @@ extension ZLEditImageViewController {
             selectedTool = nil
         }
 
-        drawColorCollectionView?.isHidden = true
-        revokeBtn.isHidden = true
-        redoBtn?.isHidden = true
-        filterCollectionView?.isHidden = true
-        adjustCollectionView?.isHidden = !isSelected
-        adjustSlider?.isHidden = !isSelected
+        drawColorCollectionView.isHidden = true
+        self.revokeRedoContainer.isHidden = true
+        filterCollectionView.isHidden = true
+        adjustCollectionView.isHidden = !isSelected
+        self.adjustSlider.isHidden = !isSelected
 
         self.editImageAdjustRef = self.editImageWithoutAdjust
     }
@@ -1091,7 +1121,7 @@ extension ZLEditImageViewController {
             }
             drawPaths.removeLast()
             revokeBtn.isEnabled = !drawPaths.isEmpty
-            redoBtn?.isEnabled = drawPaths.count != redoDrawPaths.count
+            self.redoBtn.isEnabled = drawPaths.count != redoDrawPaths.count
             drawLine()
         }
     }
@@ -1104,7 +1134,7 @@ extension ZLEditImageViewController {
             let path = redoDrawPaths[drawPaths.count]
             drawPaths.append(path)
             revokeBtn.isEnabled = !drawPaths.isEmpty
-            redoBtn?.isEnabled = drawPaths.count != redoDrawPaths.count
+            self.redoBtn.isEnabled = drawPaths.count != redoDrawPaths.count
             drawLine()
         }
     }

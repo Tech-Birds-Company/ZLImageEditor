@@ -204,6 +204,7 @@ open class ZLEditImageViewController: UIViewController {
     }()
     
     var animateDismiss = true
+    var needDismissAfterEdit = false
     
     var originalImage: UIImage
     

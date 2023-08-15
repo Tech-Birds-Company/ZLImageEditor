@@ -95,6 +95,7 @@ open class ZLEditImageViewController: UIViewController {
         layout.minimumLineSpacing = 20
         layout.minimumInteritemSpacing = 20
         layout.scrollDirection = .horizontal
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.backgroundColor = .init(white: 241/255, alpha: 1.0)
@@ -159,7 +160,8 @@ open class ZLEditImageViewController: UIViewController {
     
     open lazy var adjustCollectionView: UICollectionView = {
         let adjustLayout = UICollectionViewFlowLayout()
-        adjustLayout.itemSize = CGSize(width: 80, height: Constants.adjustColViewH)
+        adjustLayout.itemSize = UICollectionViewFlowLayout.automaticSize
+        adjustLayout.estimatedItemSize = CGSize(width: 100, height: Constants.adjustColViewH)
         adjustLayout.minimumLineSpacing = 10
         adjustLayout.minimumInteritemSpacing = 10
         adjustLayout.scrollDirection = .horizontal
@@ -287,6 +289,8 @@ open class ZLEditImageViewController: UIViewController {
     let canRedo = ZLImageEditorConfiguration.default().canRedo
     
     var hasAdjustedImage = false
+
+    var backgroundDeleted = false
     
     @objc public var editFinishBlock: ((UIImage, ZLEditImageModel?) -> Void)?
     
@@ -297,55 +301,58 @@ open class ZLEditImageViewController: UIViewController {
     override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
+
+    let dependency: EditorDependency?
     
     deinit {
         debugPrint("ZLEditImageViewController deinit")
     }
     
-    @objc public class func showEditImageVC(
-        parentVC: UIViewController?,
-        animate: Bool = true,
-        image: UIImage,
-        editModel: ZLEditImageModel? = nil,
-        completion: ((UIImage, ZLEditImageModel?) -> Void)?
-    ) {
-        let tools = ZLImageEditorConfiguration.default().tools
-        if ZLImageEditorConfiguration.default().showClipDirectlyIfOnlyHasClipTool, tools.count == 1, tools.contains(.clip) {
-            let vc = ZLClipImageViewController(
-                image: image,
-                editRect: editModel?.editRect,
-                angle: editModel?.angle ?? 0,
-                selectRatio: editModel?.selectRatio
-            )
-            vc.clipDoneBlock = { angle, editRect, ratio in
-                let m = ZLEditImageModel(
-                    drawPaths: [],
-                    editRect: editRect,
-                    angle: angle, brightness: 0,
-                    contrast: 0,
-                    saturation: 0,
-                    selectRatio: ratio,
-                    selectFilter: .normal,
-                    textStickers: nil,
-                    imageStickers: nil
-                )
-                completion?(image.zl.clipImage(angle: angle, editRect: editRect, isCircle: ratio.isCircle) ?? image, m)
-            }
-            vc.animateDismiss = animate
-            vc.modalPresentationStyle = .fullScreen
-            parentVC?.present(vc, animated: animate, completion: nil)
-        } else {
-            let vc = ZLEditImageViewController(image: image, editModel: editModel)
-            vc.editFinishBlock = { ei, editImageModel in
-                completion?(ei, editImageModel)
-            }
-            vc.animateDismiss = animate
-            vc.modalPresentationStyle = .fullScreen
-            parentVC?.present(vc, animated: animate, completion: nil)
-        }
-    }
+//    @objc public class func showEditImageVC(
+//        parentVC: UIViewController?,
+//        animate: Bool = true,
+//        image: UIImage,
+//        editModel: ZLEditImageModel? = nil,
+//        completion: ((UIImage, ZLEditImageModel?) -> Void)?
+//    ) {
+//        let tools = ZLImageEditorConfiguration.default().tools
+//        if ZLImageEditorConfiguration.default().showClipDirectlyIfOnlyHasClipTool, tools.count == 1, tools.contains(.clip) {
+//            let vc = ZLClipImageViewController(
+//                image: image,
+//                editRect: editModel?.editRect,
+//                angle: editModel?.angle ?? 0,
+//                selectRatio: editModel?.selectRatio
+//            )
+//            vc.clipDoneBlock = { angle, editRect, ratio in
+//                let m = ZLEditImageModel(
+//                    drawPaths: [],
+//                    editRect: editRect,
+//                    angle: angle, brightness: 0,
+//                    contrast: 0,
+//                    saturation: 0,
+//                    selectRatio: ratio,
+//                    selectFilter: .normal,
+//                    textStickers: nil,
+//                    imageStickers: nil
+//                )
+//                completion?(image.zl.clipImage(angle: angle, editRect: editRect, isCircle: ratio.isCircle) ?? image, m)
+//            }
+//            vc.animateDismiss = animate
+//            vc.modalPresentationStyle = .fullScreen
+//            parentVC?.present(vc, animated: animate, completion: nil)
+//        } else {
+//            let vc = ZLEditImageViewController(image: image, editModel: editModel)
+//            vc.editFinishBlock = { ei, editImageModel in
+//                completion?(ei, editImageModel)
+//            }
+//            vc.animateDismiss = animate
+//            vc.modalPresentationStyle = .fullScreen
+//            parentVC?.present(vc, animated: animate, completion: nil)
+//        }
+//    }
     
-    @objc public init(image: UIImage, editModel: ZLEditImageModel? = nil) {
+    public init(image: UIImage, editModel: ZLEditImageModel? = nil, dependency: EditorDependency? = nil) {
+        self.dependency = dependency
         var image = image
         if image.scale != 1,
            let cgImage = image.cgImage {
@@ -435,7 +442,7 @@ open class ZLEditImageViewController: UIViewController {
         
         ashbinView.frame = CGRect(
             x: (view.zl.width - Constants.ashbinSize.width) / 2,
-            y: view.zl.height - Constants.ashbinSize.height - 40,
+            y: view.zl.height - Constants.ashbinSize.height - self.bottomToolsContainerView.frame.height - 16,
             width: Constants.ashbinSize.width,
             height: Constants.ashbinSize.height
         )
@@ -745,7 +752,10 @@ private extension ZLEditImageViewController {
             make.bottom.equalToSuperview()
         }
         bottomToolsContainerView.addSubview(editToolCollectionView) { make in
-            make.leading.trailing.equalToSuperview().inset(16)
+            make.leading.greaterThanOrEqualToSuperview().offset(16)
+            make.trailing.lessThanOrEqualToSuperview().offset(-16)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(self.tools.count * 60 + 16)
             make.top.equalToSuperview().offset(16)
             make.height.equalTo(50)
         }
@@ -826,7 +836,8 @@ private extension ZLEditImageViewController {
             editImage = editImage.zl.adjust(brightness: brightness, contrast: contrast, saturation: saturation) ?? editImage
 
             self.view.addSubview(self.adjustCollectionView) { make in
-                make.horizontalEdges.equalToSuperview().inset(16)
+                make.centerX.equalToSuperview()
+                make.horizontalEdges.greaterThanOrEqualToSuperview().inset(16)
                 make.bottom.equalTo(self.bottomToolsContainerView.snp.top).offset(-8)
                 make.height.equalTo(Constants.adjustColViewH)
             }

@@ -183,6 +183,7 @@ public extension ZLImageEditorConfiguration {
         case textSticker
         case filter
         case adjust
+        case magicBackground
     }
     
     @objc enum AdjustTool: Int {

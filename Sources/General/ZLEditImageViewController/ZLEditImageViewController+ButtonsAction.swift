@@ -14,6 +14,13 @@ extension ZLEditImageViewController {
         dismiss(animated: animateDismiss, completion: nil)
     }
 
+    func magicBackgroundButtonClick() async {
+        guard let image = await self.dependency?.magicBackgroundService?.removeBackground(image: self.editImage) else { return }
+        self.backgroundDeleted = true
+        self.editImage = image
+        resetContainerViewFrame()
+    }
+
     func drawBtnClick() {
         let isSelected = selectedTool != .draw
         if isSelected {
@@ -134,7 +141,7 @@ extension ZLEditImageViewController {
         }
 
         var hasEdit = true
-        if drawPaths.isEmpty, editRect.size == imageSize, angle == 0, imageStickers.isEmpty, textStickers.isEmpty, currentFilter.applier == nil, brightness == 0, contrast == 0, saturation == 0 {
+        if drawPaths.isEmpty, editRect.size == imageSize, angle == 0, imageStickers.isEmpty, textStickers.isEmpty, currentFilter.applier == nil, brightness == 0, contrast == 0, saturation == 0, !backgroundDeleted {
             hasEdit = false
         }
 

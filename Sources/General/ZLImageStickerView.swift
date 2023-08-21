@@ -26,7 +26,7 @@
 
 import UIKit
 
-class ZLImageStickerView: ZLBaseStickerView<ZLImageStickerState> {
+public class ZLImageStickerView: ZLBaseStickerView<ZLImageStickerState> {
     private let image: UIImage
     
     private lazy var imageView: UIImageView = {
@@ -99,7 +99,7 @@ class ZLImageStickerView: ZLBaseStickerView<ZLImageStickerState> {
         imageView.frame = bounds.insetBy(dx: ZLStickerLayout.edgeInset, dy: ZLStickerLayout.edgeInset)
     }
     
-    class func calculateSize(image: UIImage, width: CGFloat) -> CGSize {
+    public class func calculateSize(image: UIImage, width: CGFloat) -> CGSize {
         let maxSide = width / 2
         let minSide: CGFloat = 100
         let whRatio = image.size.width / image.size.height
@@ -128,7 +128,7 @@ public class ZLImageStickerState: NSObject {
     let gesRotation: CGFloat
     let totalTranslationPoint: CGPoint
     
-    init(
+    public init(
         image: UIImage,
         originScale: CGFloat,
         originAngle: CGFloat,

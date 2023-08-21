@@ -57,7 +57,7 @@ enum ZLStickerLayout {
     static let edgeInset: CGFloat = 20
 }
 
-class ZLBaseStickerView<T>: UIView, UIGestureRecognizerDelegate {
+public class ZLBaseStickerView<T>: UIView, UIGestureRecognizerDelegate {
     private enum Direction: Int {
         case up = 0
         case right = 90
@@ -159,7 +159,7 @@ class ZLBaseStickerView<T>: UIView, UIGestureRecognizerDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         
         guard firstLayout else {
@@ -281,7 +281,7 @@ class ZLBaseStickerView<T>: UIView, UIGestureRecognizerDelegate {
         if isOn, !onOperation {
             onOperation = true
             cleanTimer()
-            borderView.layer.borderColor = UIColor.white.cgColor
+            borderView.layer.borderColor = UIColor.black.cgColor
             superview?.bringSubviewToFront(self)
             delegate?.stickerBeginOperation(self)
         } else if !isOn, onOperation {
@@ -331,7 +331,7 @@ class ZLBaseStickerView<T>: UIView, UIGestureRecognizerDelegate {
     
     // MARK: UIGestureRecognizerDelegate
 
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
 }

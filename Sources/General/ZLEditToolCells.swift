@@ -51,12 +51,10 @@ class ZLEditToolCell: UICollectionViewCell {
             case .magicBackground:
                 icon.image = getImage("zl_magic_stick")?.withTintColor(.init(white: 176/255, alpha: 1.0))
                 icon.highlightedImage = getImage("zl_magic_stick")?.withTintColor(.zl.editDoneBtnBgColor)
+            case .eraser:
+                icon.image = getImage("zl_eraser")?.withTintColor(.init(white: 176/255, alpha: 1.0))
+                icon.highlightedImage = getImage("zl_eraser")?.withTintColor(.zl.editDoneBtnBgColor)
             }
-
-//            if let color = UIColor.zl.toolIconHighlightedColor {
-//                icon.highlightedImage = icon.highlightedImage?
-//                    .zl.fillColor(color)
-//            }
         }
     }
     

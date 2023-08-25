@@ -8,12 +8,8 @@
 import Foundation
 import UIKit
 
-// MARK: - buttons actions
+// MARK: - tools actions
 extension ZLEditImageViewController {
-    @objc func cancelBtnClick() {
-        dismiss(animated: animateDismiss, completion: nil)
-    }
-
     func magicBackgroundButtonClick() async {
         guard let image = await self.dependency?.magicBackgroundService?.removeBackground(image: self.editImage) else { return }
         self.backgroundDeleted = true
@@ -129,6 +125,32 @@ extension ZLEditImageViewController {
         self.editImageAdjustRef = self.editImageWithoutAdjust
     }
 
+    func eraserButtonClick() {
+        let isSelected = selectedTool != .eraser
+        if isSelected {
+            selectedTool = .eraser
+        } else {
+            selectedTool = nil
+        }
+
+        self.maskableView.isHidden = !isSelected
+        if isSelected {
+            self.maskableView.configure(with: self.editImage, and: getImage("greyCheckerboard")!)
+        } else {
+            guard let image =  self.maskableView.image else { return }
+            self.editImage = image
+            resetContainerViewFrame()
+        }
+    }
+}
+
+
+// MARK: - buttons actions
+extension ZLEditImageViewController {
+    @objc func cancelBtnClick() {
+        dismiss(animated: animateDismiss, completion: nil)
+    }
+
     @objc func doneBtnClick() {
         var textStickers: [(ZLTextStickerState, Int)] = []
         var imageStickers: [(ZLImageStickerState, Int)] = []
@@ -208,4 +230,6 @@ extension ZLEditImageViewController {
             drawLine()
         }
     }
+
+
 }

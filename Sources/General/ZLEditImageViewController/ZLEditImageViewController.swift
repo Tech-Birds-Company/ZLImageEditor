@@ -17,13 +17,19 @@ open class ZLEditImageViewController: UIViewController {
         view.clipsToBounds = true
         return view
     }()
+
+    lazy var maskableView: MaskableViewContainer = {
+        let maskCont = MaskableViewContainer()
+        maskCont.isHidden = true
+        return maskCont
+    }()
     
     // Show image.
     open lazy var imageView: UIImageView = {
         let view = UIImageView(image: originalImage)
         view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
-        view.backgroundColor = .black
+        view.backgroundColor = .clear
         return view
     }()
     
@@ -517,6 +523,7 @@ open class ZLEditImageViewController: UIViewController {
         let scaleImageSize = CGSize(width: imageSize.width * ratio, height: imageSize.height * ratio)
         imageView.frame = CGRect(origin: scaleImageOrigin, size: scaleImageSize)
         drawingImageView.frame = imageView.frame
+        maskableView.frame = imageView.frame
         stickersContainer.frame = imageView.frame
         
         // Optimization for long pictures.
@@ -745,6 +752,7 @@ private extension ZLEditImageViewController {
         containerView.addSubview(imageView)
         containerView.addSubview(drawingImageView)
         containerView.addSubview(stickersContainer)
+        containerView.addSubview(maskableView)
 
         self.view.addSubview(bottomToolsContainerView) { make in
             make.top.equalTo(mainScrollView.snp.bottom)

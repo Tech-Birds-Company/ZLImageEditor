@@ -184,6 +184,7 @@ public extension ZLImageEditorConfiguration {
         case filter
         case adjust
         case magicBackground
+        case eraser // стирать часть фотки или возвращать
     }
     
     @objc enum AdjustTool: Int {

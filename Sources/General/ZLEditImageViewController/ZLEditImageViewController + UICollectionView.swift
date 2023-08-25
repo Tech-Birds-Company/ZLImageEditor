@@ -98,6 +98,8 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
                 Task(priority: .userInitiated) {
                     await self.magicBackgroundButtonClick()
                 }
+            case .eraser:
+                eraserButtonClick()
             }
         } else if collectionView == drawColorCollectionView {
             currentDrawColor = drawColors[indexPath.row]

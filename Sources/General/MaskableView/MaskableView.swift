@@ -152,8 +152,6 @@ class MaskableView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         doInitSetup()
-
-        //self.backgroundColor = .red
     }
 
     required init?(coder: NSCoder) {

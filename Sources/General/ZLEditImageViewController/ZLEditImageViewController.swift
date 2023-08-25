@@ -23,6 +23,26 @@ open class ZLEditImageViewController: UIViewController {
         maskCont.isHidden = true
         return maskCont
     }()
+
+    lazy var maskableRadiusSlider: UISlider = {
+       let slider = UISlider()
+        slider.minimumValue = 1
+        slider.maximumValue = 100
+        slider.value = 20
+        slider.tintColor = .zl.editDoneBtnBgColor
+        slider.addTarget(self, action: #selector(self.handleCircleRadiusSlider(_:)), for: .valueChanged)
+        slider.isHidden = true
+        return slider
+    }()
+
+    lazy var maskableSegmentControl: UISegmentedControl = {
+        // Create a segmented control
+        let segmentedControl = UISegmentedControl(items: ["Erase", "Reveal"])
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.addTarget(self, action: #selector(self.handleEraseRevealControl(_:)), for: .valueChanged)
+        segmentedControl.isHidden = true
+        return segmentedControl
+    }()
     
     // Show image.
     open lazy var imageView: UIImageView = {
@@ -297,6 +317,7 @@ open class ZLEditImageViewController: UIViewController {
     var hasAdjustedImage = false
 
     var backgroundDeleted = false
+    var eraseUsed = false
     
     @objc public var editFinishBlock: ((UIImage, ZLEditImageModel?) -> Void)?
     
@@ -548,6 +569,7 @@ open class ZLEditImageViewController: UIViewController {
         self.setupAshbinViewUI()
         self.setupImageSticker()
         self.setupTextSticker()
+        self.setupEraserToolUI()
         
         panGes = UIPanGestureRecognizer(target: self, action: #selector(drawAction(_:)))
         panGes.maximumNumberOfTouches = 1
@@ -725,6 +747,21 @@ open class ZLEditImageViewController: UIViewController {
             self.self.adjustSlider.alpha = 1
         }
     }
+
+
+}
+
+// MARK: - maskable handle actions
+extension ZLEditImageViewController {
+    @objc func handleEraseRevealControl(_ sender: UISegmentedControl) {
+        if let drawingAction  = DrawingAction(rawValue: sender.selectedSegmentIndex) {
+            maskableView.drawingAction = drawingAction
+        }
+    }
+
+    @objc func handleCircleRadiusSlider(_ sender: UISlider) {
+        maskableView.cirleRadius = CGFloat(sender.value)
+    }
 }
 
 // MARK: - setup UI
@@ -752,7 +789,6 @@ private extension ZLEditImageViewController {
         containerView.addSubview(imageView)
         containerView.addSubview(drawingImageView)
         containerView.addSubview(stickersContainer)
-        containerView.addSubview(maskableView)
 
         self.view.addSubview(bottomToolsContainerView) { make in
             make.top.equalTo(mainScrollView.snp.bottom)
@@ -882,5 +918,22 @@ private extension ZLEditImageViewController {
         asbinTipLabel.numberOfLines = 2
         asbinTipLabel.lineBreakMode = .byCharWrapping
         ashbinView.addSubview(asbinTipLabel)
+    }
+
+    func setupEraserToolUI() {
+        if tools.contains(.eraser) {
+            containerView.addSubview(maskableView)
+            self.view.addSubview(self.maskableSegmentControl) { make in
+                make.leading.equalToSuperview().offset(16)
+                make.bottom.equalTo(self.bottomToolsContainerView.snp.top).offset(-8)
+                make.height.equalTo(Constants.drawColViewH)
+            }
+            self.view.addSubview(self.maskableRadiusSlider) { make in
+                make.leading.equalTo(self.maskableSegmentControl.snp.trailing).offset(16)
+                make.trailing.equalToSuperview().offset(-16)
+                make.bottom.equalTo(self.bottomToolsContainerView.snp.top).offset(-8)
+                make.height.equalTo(Constants.drawColViewH)
+            }
+        }
     }
 }

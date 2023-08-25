@@ -69,12 +69,12 @@ extension ZLEditImageViewController {
         }
 
         // пришлось убрать потому что странной поведение когда открывается через swiftui
-//        present(vc, animated: false) {
-//            self.mainScrollView.alpha = 0
-//            self.headerView.alpha = 0
-//            self.bottomToolsContainerView.alpha = 0
-//            self.self.adjustSlider.alpha = 0
-//        }
+        //        present(vc, animated: false) {
+        //            self.mainScrollView.alpha = 0
+        //            self.headerView.alpha = 0
+        //            self.bottomToolsContainerView.alpha = 0
+        //            self.self.adjustSlider.alpha = 0
+        //        }
     }
 
     func imageStickerBtnClick() {
@@ -109,6 +109,10 @@ extension ZLEditImageViewController {
     }
 
     func adjustBtnClick() {
+        if selectedTool == .eraser {
+            self.showHideMaskableView(isSelected: false)
+            self.saveFromMaskableView()
+        }
         let isSelected = selectedTool != .adjust
         if isSelected {
             selectedTool = .adjust
@@ -120,12 +124,17 @@ extension ZLEditImageViewController {
         self.revokeRedoContainer.isHidden = true
         filterCollectionView.isHidden = true
         adjustCollectionView.isHidden = !isSelected
+
+
         self.adjustSlider.isHidden = !isSelected
 
-        self.editImageAdjustRef = self.editImageWithoutAdjust
+        self.editImageAdjustRef = self.editImage
     }
 
     func eraserButtonClick() {
+        filterCollectionView.isHidden = true
+        adjustCollectionView.isHidden = true
+        self.adjustSlider.isHidden = true
         let isSelected = selectedTool != .eraser
         if isSelected {
             selectedTool = .eraser
@@ -133,14 +142,25 @@ extension ZLEditImageViewController {
             selectedTool = nil
         }
 
-        self.maskableView.isHidden = !isSelected
+        self.showHideMaskableView(isSelected: isSelected)
         if isSelected {
             self.maskableView.configure(with: self.editImage, and: getImage("greyCheckerboard")!)
         } else {
-            guard let image =  self.maskableView.image else { return }
-            self.editImage = image
-            resetContainerViewFrame()
+            self.saveFromMaskableView()
         }
+    }
+
+    private func showHideMaskableView(isSelected: Bool) {
+        self.maskableView.isHidden = !isSelected
+        self.maskableRadiusSlider.isHidden = !isSelected
+        self.maskableSegmentControl.isHidden = !isSelected
+    }
+
+    private func saveFromMaskableView() {
+        guard let image =  self.maskableView.image else { return }
+        self.editImage = image
+        resetContainerViewFrame()
+        self.eraseUsed = true
     }
 }
 
@@ -163,7 +183,15 @@ extension ZLEditImageViewController {
         }
 
         var hasEdit = true
-        if drawPaths.isEmpty, editRect.size == imageSize, angle == 0, imageStickers.isEmpty, textStickers.isEmpty, currentFilter.applier == nil, brightness == 0, contrast == 0, saturation == 0, !backgroundDeleted {
+        if drawPaths.isEmpty,
+           editRect.size == imageSize,
+           angle == 0, imageStickers.isEmpty,
+           textStickers.isEmpty,
+           currentFilter.applier == nil,
+           brightness == 0, contrast == 0,
+           saturation == 0,
+           !backgroundDeleted,
+           !eraseUsed {
             hasEdit = false
         }
 

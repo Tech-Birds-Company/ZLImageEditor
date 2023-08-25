@@ -14,6 +14,19 @@ class MaskableViewContainer: UIView {
         self.maskableView.image
     }
 
+    var drawingAction: DrawingAction = .erase {
+        didSet {
+            self.maskableView.drawingAction = drawingAction
+        }
+    }
+
+    var cirleRadius: CGFloat = 20 {
+        didSet {
+            self.maskableView.circleRadius = cirleRadius
+        }
+    }
+
+    private var firstTime = true
     private let backgroundImage: UIImageView = {
         let bImage = UIImageView()
         bImage.contentMode = .scaleAspectFill
@@ -47,8 +60,10 @@ class MaskableViewContainer: UIView {
     }
 
     func configure(with image: UIImage, and background: UIImage) {
+        guard firstTime else { return }
         self.maskableView.image = image
         self.backgroundImage.image = background
+        self.firstTime = false
     }
 
 }

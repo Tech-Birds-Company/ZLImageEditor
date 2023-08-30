@@ -18,7 +18,24 @@ public class ZLDrawPath: NSObject {
 
     public let shapeLayer: CAShapeLayer
 
-    public init(pathColor: UIColor, pathWidth: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
+    public init(
+        pathColor: UIColor,
+        path: UIBezierPath,
+        ratio: CGFloat,
+        shapeLayer: CAShapeLayer
+    ) {
+        self.pathColor = pathColor
+        self.path = path
+        self.ratio = ratio
+        self.shapeLayer = shapeLayer
+    }
+
+    public init(
+        pathColor: UIColor,
+        pathWidth: CGFloat,
+        ratio: CGFloat,
+        startPoint: CGPoint
+    ) {
         self.pathColor = pathColor
         path = UIBezierPath()
         path.lineWidth = pathWidth / ratio

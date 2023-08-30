@@ -36,7 +36,7 @@ public class ZLEditImageModel: NSObject {
         contrast: Float,
         saturation: Float,
         selectRatio: ZLImageClipRatio?,
-        selectFilter: ZLFilter,
+        selectFilter: ZLFilter?,
         textStickers: [(state: ZLTextStickerState, index: Int)]?,
         imageStickers: [(state: ZLImageStickerState, index: Int)]?
     ) {

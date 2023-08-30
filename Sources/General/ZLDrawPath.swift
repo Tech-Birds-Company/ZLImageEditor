@@ -10,15 +10,15 @@ import UIKit
 // MARK: Draw path
 
 public class ZLDrawPath: NSObject {
-    let pathColor: UIColor
+    public let pathColor: UIColor
 
-    let path: UIBezierPath
+    public let path: UIBezierPath
 
-    let ratio: CGFloat
+    public let ratio: CGFloat
 
-    let shapeLayer: CAShapeLayer
+    public let shapeLayer: CAShapeLayer
 
-    init(pathColor: UIColor, pathWidth: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
+    public init(pathColor: UIColor, pathWidth: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
         self.pathColor = pathColor
         path = UIBezierPath()
         path.lineWidth = pathWidth / ratio

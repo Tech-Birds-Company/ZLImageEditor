@@ -206,18 +206,18 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
 }
 
 public class ZLTextStickerState: NSObject {
-    let text: String
-    let textColor: UIColor
-    let bgColor: UIColor
-    let originScale: CGFloat
-    let originAngle: CGFloat
-    let originFrame: CGRect
-    let gesScale: CGFloat
-    let gesRotation: CGFloat
-    let totalTranslationPoint: CGPoint
-    let textFont: UIFont?
+    public let text: String
+    public let textColor: UIColor
+    public let bgColor: UIColor
+    public let originScale: CGFloat
+    public let originAngle: CGFloat
+    public let originFrame: CGRect
+    public let gesScale: CGFloat
+    public let gesRotation: CGFloat
+    public let totalTranslationPoint: CGPoint
+    public let textFont: UIFont?
     
-    init(
+    public init(
         text: String,
         textColor: UIColor,
         font: UIFont?,

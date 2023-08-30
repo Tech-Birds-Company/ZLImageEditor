@@ -120,13 +120,13 @@ public class ZLImageStickerView: ZLBaseStickerView<ZLImageStickerState> {
 }
 
 public class ZLImageStickerState: NSObject {
-    let image: UIImage
-    let originScale: CGFloat
-    let originAngle: CGFloat
-    let originFrame: CGRect
-    let gesScale: CGFloat
-    let gesRotation: CGFloat
-    let totalTranslationPoint: CGPoint
+    public let image: UIImage
+    public let originScale: CGFloat
+    public let originAngle: CGFloat
+    public let originFrame: CGRect
+    public let gesScale: CGFloat
+    public let gesRotation: CGFloat
+    public let totalTranslationPoint: CGPoint
     
     public init(
         image: UIImage,

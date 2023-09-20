@@ -10,6 +10,7 @@ import UIKit
 
 class MaskableViewContainer: UIView {
 
+
     var image: UIImage? {
         self.maskableView.image
     }
@@ -25,6 +26,8 @@ class MaskableViewContainer: UIView {
             self.maskableView.circleRadius = cirleRadius
         }
     }
+
+    public var showHideTools: ((Bool) -> ())?
 
     private var firstTime = true
     private let backgroundImage: UIImageView = {
@@ -49,9 +52,11 @@ class MaskableViewContainer: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.maskableView.frame = self.bounds
-        self.maskableView.updateBounds()
-        self.backgroundImage.frame = self.bounds
+        if maskableView.bounds != self.bounds {
+            self.maskableView.frame = self.bounds
+            maskableView.updateBounds()
+            self.backgroundImage.frame = self.bounds
+        }
     }
 
     @available(*, unavailable)
@@ -61,9 +66,10 @@ class MaskableViewContainer: UIView {
 
     func configure(with image: UIImage, and background: UIImage) {
         guard firstTime else { return }
-        self.maskableView.image = image
+        self.maskableView.imageView.image = image
         self.backgroundImage.image = background
         self.firstTime = false
+        self.maskableView.showHideTools = self.showHideTools
     }
 
 }

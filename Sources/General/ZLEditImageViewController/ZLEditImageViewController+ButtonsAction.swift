@@ -152,8 +152,7 @@ extension ZLEditImageViewController {
 
     private func showHideMaskableView(isSelected: Bool) {
         self.maskableView.isHidden = !isSelected
-        self.maskableRadiusSlider.isHidden = !isSelected
-        self.maskableSegmentControl.isHidden = !isSelected
+        self.masakableControlsContainer.isHidden = !isSelected
     }
 
     private func saveFromMaskableView() {

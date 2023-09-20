@@ -21,7 +21,17 @@ open class ZLEditImageViewController: UIViewController {
     lazy var maskableView: MaskableViewContainer = {
         let maskCont = MaskableViewContainer()
         maskCont.isHidden = true
+        maskCont.showHideTools = { [weak self] hide in
+            self?.masakableControlsContainer.isHidden = hide
+        }
         return maskCont
+    }()
+
+    lazy var masakableControlsContainer: UIView = {
+        let view = UIView()
+        view.isHidden = true
+        view.backgroundColor = .white
+        return view
     }()
 
     lazy var maskableRadiusSlider: UISlider = {
@@ -31,7 +41,6 @@ open class ZLEditImageViewController: UIViewController {
         slider.value = 20
         slider.tintColor = .zl.editDoneBtnBgColor
         slider.addTarget(self, action: #selector(self.handleCircleRadiusSlider(_:)), for: .valueChanged)
-        slider.isHidden = true
         return slider
     }()
 
@@ -40,7 +49,6 @@ open class ZLEditImageViewController: UIViewController {
         let segmentedControl = UISegmentedControl(items: ["Erase", "Reveal"])
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.addTarget(self, action: #selector(self.handleEraseRevealControl(_:)), for: .valueChanged)
-        segmentedControl.isHidden = true
         return segmentedControl
     }()
     
@@ -544,7 +552,6 @@ open class ZLEditImageViewController: UIViewController {
         let scaleImageSize = CGSize(width: imageSize.width * ratio, height: imageSize.height * ratio)
         imageView.frame = CGRect(origin: scaleImageOrigin, size: scaleImageSize)
         drawingImageView.frame = imageView.frame
-        maskableView.frame = imageView.frame
         stickersContainer.frame = imageView.frame
         
         // Optimization for long pictures.
@@ -922,17 +929,27 @@ private extension ZLEditImageViewController {
 
     func setupEraserToolUI() {
         if tools.contains(.eraser) {
-            containerView.addSubview(maskableView)
-            self.view.addSubview(self.maskableSegmentControl) { make in
-                make.leading.equalToSuperview().offset(16)
-                make.bottom.equalTo(self.bottomToolsContainerView.snp.top).offset(-8)
+            containerView.addSubview(maskableView) { make in
+                make.edges.equalToSuperview()
+            }
+
+            self.view.addSubview(masakableControlsContainer) { make in
+                make.leading.equalToSuperview()
+                make.trailing.equalToSuperview()
+                make.bottom.equalTo(self.bottomToolsContainerView.snp.top)
                 make.height.equalTo(Constants.drawColViewH)
             }
-            self.view.addSubview(self.maskableRadiusSlider) { make in
+
+            self.masakableControlsContainer.addSubview(self.maskableSegmentControl) { make in
+                make.leading.equalToSuperview().offset(16)
+                make.bottom.equalToSuperview()
+                make.top.equalToSuperview().offset(8)
+            }
+            self.masakableControlsContainer.addSubview(self.maskableRadiusSlider) { make in
                 make.leading.equalTo(self.maskableSegmentControl.snp.trailing).offset(16)
                 make.trailing.equalToSuperview().offset(-16)
-                make.bottom.equalTo(self.bottomToolsContainerView.snp.top).offset(-8)
-                make.height.equalTo(Constants.drawColViewH)
+                make.bottom.equalToSuperview()
+                make.top.equalToSuperview().offset(8)
             }
         }
     }

@@ -14,37 +14,36 @@ enum DrawingAction: Int {
 
 import UIKit.UIGestureRecognizerSubclass
 
+
 class MaskableView: UIView {
 
     public var drawingAction: DrawingAction = .erase
-    @objc @IBInspectable public var circleRadius: CGFloat = 20
+    public var circleRadius: CGFloat = 20
     public var maskDrawingAlpha: CGFloat = 1.0
     public var image: UIImage? {
-        get {
-            guard let renderer = renderer else { return nil}
-            let result = renderer.image {
-                context in
+        guard let renderer = renderer else { return nil}
+        let result = renderer.image {
+            context in
 
-                return layer.render(in: context.cgContext)
-            }
-            return result
+            return layer.render(in: context.cgContext)
         }
-        set {
-            self.imageView.image = newValue
-            self.updateBounds()
-        }
+        return result
     }
+
+    var showHideTools: ((Bool) -> ())?
+
+    let imageView = UIImageView()
 
     /// This color is used to draw the "cursor" around the circle shape being drawn onto the mask layer. By default the color is nil (no cursor)
     /// Set a color if you want to stroke the circle being drawn.
-    @objc @IBInspectable public var circleCursorColor: UIColor? = nil {
+    public var circleCursorColor: UIColor? = nil {
         didSet { shapeLayer.strokeColor = circleCursorColor?.cgColor }
     }
 
     /// This color is used to draw an outer circle around the  circle shape being drawn onto the mask layer. By default the color is nil (no cursor)
     /// Use a outerCircleCursorColor that contrasts with the  circleCursorColor
     /// (e.g. use a dark outerCircleCursorColor for a light circleCursorColor)
-    @objc @IBInspectable public var outerCircleCursorColor: UIColor? = nil {
+    public var outerCircleCursorColor: UIColor? = nil {
         didSet { outerShapeLayer.strokeColor = outerCircleCursorColor?.cgColor }
     }
 
@@ -59,8 +58,6 @@ class MaskableView: UIView {
 
     private var firstTime = true
 
-    private let imageView: UIImageView = UIImageView()
-
     // MARK: - Public functions
 
     public func updateBounds() {
@@ -70,7 +67,9 @@ class MaskableView: UIView {
         self.imageView.frame = self.bounds
 
         if firstTime {
-            renderer = UIGraphicsImageRenderer(size: bounds.size)
+            let traitCollection = UITraitCollection(displayScale: 1.0)
+            let rendererFormat = UIGraphicsImageRendererFormat(for: traitCollection)
+            renderer = UIGraphicsImageRenderer(bounds: self.bounds, format: rendererFormat)
             installSampleMask()
             layer.superlayer?.addSublayer(shapeLayer)
             layer.superlayer?.addSublayer(outerShapeLayer)
@@ -141,9 +140,11 @@ class MaskableView: UIView {
         let point = sender.location(in: self)
         if sender.state != .ended {
             drawCircleAtPoint(point: point)
+            self.showHideTools?(true)
         } else {
             self.shapeLayer.path = nil
             self.outerShapeLayer.path = nil
+            self.showHideTools?(false)
         }
     }
 

@@ -31,7 +31,7 @@ let version = "1.1.7"
 
 public struct ZLImageEditorWrapper<Base> {
     public let base: Base
-    
+
     public init(_ base: Base) {
         self.base = base
     }
@@ -46,7 +46,7 @@ extension ZLImageEditorCompatible {
         get { ZLImageEditorWrapper(self) }
         set { }
     }
-    
+
     public static var zl: ZLImageEditorWrapper<Self>.Type {
         get { ZLImageEditorWrapper<Self>.self }
         set { }

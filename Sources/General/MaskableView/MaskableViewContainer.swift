@@ -10,7 +10,6 @@ import UIKit
 
 class MaskableViewContainer: UIView {
 
-
     var image: UIImage? {
         self.maskableView.image
     }
@@ -27,7 +26,7 @@ class MaskableViewContainer: UIView {
         }
     }
 
-    public var showHideTools: ((Bool) -> ())?
+    public var showHideTools: ((Bool) -> Void)?
 
     private var firstTime = true
     private let backgroundImage: UIImageView = {

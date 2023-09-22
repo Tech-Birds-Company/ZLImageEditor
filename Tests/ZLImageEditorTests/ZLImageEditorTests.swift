@@ -10,6 +10,6 @@ final class ZLImageEditorTests: XCTestCase {
     }
 
     static var allTests = [
-        ("testExample", testExample),
+        ("testExample", testExample)
     ]
 }

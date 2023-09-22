@@ -12,9 +12,6 @@ enum DrawingAction: Int {
     case draw = 1
 }
 
-import UIKit.UIGestureRecognizerSubclass
-
-
 class MaskableView: UIView {
 
     public var drawingAction: DrawingAction = .erase
@@ -30,26 +27,26 @@ class MaskableView: UIView {
         return result
     }
 
-    var showHideTools: ((Bool) -> ())?
+    var showHideTools: ((Bool) -> Void)?
 
     let imageView = UIImageView()
 
     /// This color is used to draw the "cursor" around the circle shape being drawn onto the mask layer. By default the color is nil (no cursor)
     /// Set a color if you want to stroke the circle being drawn.
-    public var circleCursorColor: UIColor? = nil {
+    public var circleCursorColor: UIColor? {
         didSet { shapeLayer.strokeColor = circleCursorColor?.cgColor }
     }
 
     /// This color is used to draw an outer circle around the  circle shape being drawn onto the mask layer. By default the color is nil (no cursor)
     /// Use a outerCircleCursorColor that contrasts with the  circleCursorColor
     /// (e.g. use a dark outerCircleCursorColor for a light circleCursorColor)
-    public var outerCircleCursorColor: UIColor? = nil {
+    public var outerCircleCursorColor: UIColor? {
         didSet { outerShapeLayer.strokeColor = outerCircleCursorColor?.cgColor }
     }
 
     // MARK: - Private vars
 
-    private var maskImage: UIImage? = nil
+    private var maskImage: UIImage?
     private var maskLayer = CALayer()
     private var shapeLayer = CAShapeLayer()
     private var outerShapeLayer = CAShapeLayer()
@@ -76,7 +73,7 @@ class MaskableView: UIView {
             firstTime = false
         } else {
             guard let renderer = renderer else { return }
-            let image = renderer.image { (context) in
+            let image = renderer.image { (_) in
                 if let maskImage = maskImage {
                     maskImage.draw(in: bounds)
                 }
@@ -116,14 +113,14 @@ class MaskableView: UIView {
                 }
 
                 if circleCursorColor != nil {
-                    let circlePath = UIBezierPath(ovalIn:rect)
+                    let circlePath = UIBezierPath(ovalIn: rect)
                     circlePath.fill(with: blendMode, alpha: alpha)
                     shapeLayer.path = circlePath.cgPath
                 }
 
                 if outerCircleCursorColor != nil {
                     let outerRect = rect.insetBy(dx: -2, dy: -2)
-                    let outerCirclePath = UIBezierPath(ovalIn:outerRect)
+                    let outerCirclePath = UIBezierPath(ovalIn: outerRect)
                     outerCirclePath.fill(with: blendMode, alpha: alpha)
                     outerShapeLayer.path = outerCirclePath.cgPath
                 }

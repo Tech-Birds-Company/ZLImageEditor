@@ -125,7 +125,6 @@ extension ZLEditImageViewController {
         filterCollectionView.isHidden = true
         adjustCollectionView.isHidden = !isSelected
 
-
         self.adjustSlider.isHidden = !isSelected
 
         self.editImageAdjustRef = self.editImage
@@ -162,7 +161,6 @@ extension ZLEditImageViewController {
         self.eraseUsed = true
     }
 }
-
 
 // MARK: - buttons actions
 extension ZLEditImageViewController {
@@ -257,6 +255,5 @@ extension ZLEditImageViewController {
             drawLine()
         }
     }
-
 
 }

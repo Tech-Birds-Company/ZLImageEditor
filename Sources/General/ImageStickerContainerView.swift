@@ -146,7 +146,6 @@ public class ImageStickerContainerView: UIView, ZLImageStickerContainerDelegate 
 
 }
 
-
 extension ImageStickerContainerView: UIGestureRecognizerDelegate {
 
     public override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -155,7 +154,6 @@ extension ImageStickerContainerView: UIGestureRecognizerDelegate {
     }
 
 }
-
 
 extension ImageStickerContainerView: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
@@ -200,7 +198,6 @@ extension ImageStickerContainerView: UICollectionViewDataSource, UICollectionVie
     }
 
 }
-
 
 class ImageStickerCell: UICollectionViewCell {
 

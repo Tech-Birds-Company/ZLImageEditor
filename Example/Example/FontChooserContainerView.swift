@@ -85,13 +85,12 @@ class FontChooserContainerView: UIView, ZLTextFontChooserDelegate {
             let provider = CGDataProvider(data: data! as CFData)
             let font = CGFont(provider!)
 
-            if (!CTFontManagerRegisterGraphicsFont(font!, &error)) {
+            if !CTFontManagerRegisterGraphicsFont(font!, &error) {
                 print("Failed to register font, error: \(String(describing: error))")
                 return
             }
         }
     }
-
 
     func setupUI() {
         importFonts()
@@ -191,7 +190,6 @@ class FontChooserContainerView: UIView, ZLTextFontChooserDelegate {
 
 }
 
-
 extension FontChooserContainerView: UIGestureRecognizerDelegate {
 
     public override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -200,7 +198,6 @@ extension FontChooserContainerView: UIGestureRecognizerDelegate {
     }
 
 }
-
 
 extension FontChooserContainerView: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
@@ -233,7 +230,6 @@ extension FontChooserContainerView: UICollectionViewDataSource, UICollectionView
         self.hide()
     }
 }
-
 
 class FontCell: UICollectionViewCell {
 

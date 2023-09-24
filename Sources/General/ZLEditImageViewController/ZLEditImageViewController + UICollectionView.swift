@@ -84,20 +84,27 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
             switch toolType {
             case .draw:
                 self.drawBtnClick()
+
             case .clip:
                 clipBtnClick()
+
             case .imageSticker:
                 imageStickerBtnClick()
+
             case .textSticker:
                 textStickerBtnClick()
+
             case .filter:
                 filterBtnClick()
+
             case .adjust:
                 adjustBtnClick()
+
             case .magicBackground:
                 Task(priority: .userInitiated) {
                     await self.magicBackgroundButtonClick()
                 }
+
             case .eraser:
                 eraserButtonClick()
             }

@@ -18,21 +18,21 @@ class CustomFilter: NSObject {
         guard let ciImage = ci else {
             return image
         }
-        
+
         let filter = HazeRemovalFilter()
         filter.inputImage = ciImage
-        
+
         guard let outputCIImage = filter.outputImage else {
             return image
         }
-        
+
         let context = CIContext()
         guard let cgImage = context.createCGImage(outputCIImage, from: outputCIImage.extent) else {
             return image
         }
         return UIImage(cgImage: cgImage)
     }
-    
+
 }
 
 class HazeRemovalFilter: CIFilter {
@@ -41,7 +41,7 @@ class HazeRemovalFilter: CIFilter {
     var inputDistance: Float! = 0.2
     var inputSlope: Float! = 0.0
     var hazeRemovalKernel: CIKernel!
-    
+
     override init() {
         // check kernel has been already initialized
         let code: String = """
@@ -64,11 +64,11 @@ kernel vec4 myHazeRemovalKernel(
         self.hazeRemovalKernel = CIKernel(source: code)
         super.init()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override var outputImage: CIImage? {
         guard let inputImage = self.inputImage,
             let hazeRemovalKernel = self.hazeRemovalKernel,
@@ -89,7 +89,7 @@ kernel vec4 myHazeRemovalKernel(
             inputSlope
             ])
     }
-    
+
     override var attributes: [String: Any] {
         return [
             kCIAttributeFilterDisplayName: "Haze Removal Filter",

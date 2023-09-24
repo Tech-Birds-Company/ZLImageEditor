@@ -30,21 +30,21 @@ private class BundleFinder { }
 
 extension Bundle {
     private static var bundle: Bundle?
-    
+
     static var normal_module: Bundle? = {
         let bundleName = "ZLImageEditor"
 
         var candidates = [
             // Bundle should be present here when the package is linked into an App.
             Bundle.main.resourceURL,
-            
+
             // Bundle should be present here when the package is linked into a framework.
             Bundle(for: ZLEditImageViewController.self).resourceURL,
-            
+
             // For command-line tools.
-            Bundle.main.bundleURL,
+            Bundle.main.bundleURL
         ]
-        
+
         #if SWIFT_PACKAGE
             // For SWIFT_PACKAGE.
             candidates.append(Bundle.module.bundleURL)
@@ -56,22 +56,22 @@ extension Bundle {
                 return bundle
             }
         }
-        
+
         return nil
     }()
-    
+
     static var spm_module: Bundle? = {
         let bundleName = "ZLImageEditor_ZLImageEditor"
 
         let candidates = [
             // Bundle should be present here when the package is linked into an App.
             Bundle.main.resourceURL,
-            
+
             // Bundle should be present here when the package is linked into a framework.
             Bundle(for: BundleFinder.self).resourceURL,
-            
+
             // For command-line tools.
-            Bundle.main.bundleURL,
+            Bundle.main.bundleURL
         ]
 
         for candidate in candidates {
@@ -80,18 +80,18 @@ extension Bundle {
                 return bundle
             }
         }
-        
+
         return nil
     }()
-    
+
     static var zlImageEditorBundle: Bundle? {
         return normal_module ?? spm_module
     }
-    
+
     class func resetLanguage() {
         bundle = nil
     }
-    
+
     class func zlLocalizedString(_ key: String) -> String {
         if bundle == nil {
             guard let path = Bundle.zlImageEditorBundle?.path(forResource: getLanguage(), ofType: "lproj") else {
@@ -99,18 +99,18 @@ extension Bundle {
             }
             bundle = Bundle(path: path)
         }
-        
+
         let value = bundle?.localizedString(forKey: key, value: nil, table: nil)
         return Bundle.main.localizedString(forKey: key, value: value, table: nil)
     }
-    
+
     private class func getLanguage() -> String {
         var language = "en"
-        
+
         switch ZLImageEditorUIConfiguration.default().languageType {
         case .system:
             language = Locale.preferredLanguages.first ?? "en"
-            
+
             if language.hasPrefix("zh") {
                 if language.range(of: "Hans") != nil {
                     language = "zh-Hans"
@@ -148,6 +148,7 @@ extension Bundle {
             } else {
                 language = "en"
             }
+
         case .chineseSimplified:
             language = "zh-Hans"
         case .chineseTraditional:
@@ -183,7 +184,7 @@ extension Bundle {
         case .ukrainian:
             language = "uk"
         }
-        
+
         return language
     }
 }

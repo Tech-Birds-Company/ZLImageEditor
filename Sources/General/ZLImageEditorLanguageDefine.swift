@@ -49,35 +49,35 @@ import Foundation
 
 public struct ZLLocalLanguageKey: Hashable {
     public let rawValue: String
-    
+
     public init(rawValue: String) {
         self.rawValue = rawValue
     }
-    
+
     /// Cancel (取消)
     public static let cancel = ZLLocalLanguageKey(rawValue: "cancel")
-    
+
     /// Done (确定)
     public static let done = ZLLocalLanguageKey(rawValue: "done")
-    
+
     /// Done (完成)
     public static let editFinish = ZLLocalLanguageKey(rawValue: "editFinish")
-    
+
     /// Undo (还原)
     public static let revert = ZLLocalLanguageKey(rawValue: "revert")
-    
+
     /// Brightness (亮度)
     public static let brightness = ZLLocalLanguageKey(rawValue: "brightness")
-    
+
     /// Contrast (对比度)
     public static let contrast = ZLLocalLanguageKey(rawValue: "contrast")
-    
+
     /// Saturation (饱和度)
     public static let saturation = ZLLocalLanguageKey(rawValue: "saturation")
-    
+
     /// Drag here to remove (拖到此处删除)
     public static let textStickerRemoveTips = ZLLocalLanguageKey(rawValue: "textStickerRemoveTips")
-    
+
     /// waiting... (正在处理...)
     public static let hudLoading = ZLLocalLanguageKey(rawValue: "hudLoading")
 }
@@ -86,6 +86,6 @@ func localLanguageTextValue(_ key: ZLLocalLanguageKey) -> String {
     if let value = ZLImageEditorUIConfiguration.default().customLanguageConfig[key] {
         return value
     }
-    
+
     return Bundle.zlLocalizedString(key.rawValue)
 }

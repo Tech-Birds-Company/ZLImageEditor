@@ -9,7 +9,7 @@ let package = Package(
     products: [
         .library(
             name: "ZLImageEditor",
-            targets: ["ZLImageEditor"]),
+            targets: ["ZLImageEditor"])
     ],
     dependencies: [
         .package(
@@ -22,12 +22,12 @@ let package = Package(
         .target(
             name: "ZLImageEditor",
             dependencies: [
-                .product(name: "SnapKit", package: "SnapKit"),
+                .product(name: "SnapKit", package: "SnapKit")
             ],
             path: "Sources",
             exclude: ["Info.plist"],
             resources: [
                 .process("ZLImageEditor.bundle")
-            ]),
+            ])
     ]
 )

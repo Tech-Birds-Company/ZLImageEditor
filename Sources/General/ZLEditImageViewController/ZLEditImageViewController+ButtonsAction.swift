@@ -11,6 +11,7 @@ import UIKit
 // MARK: - tools actions
 extension ZLEditImageViewController {
     func magicBackgroundButtonClick() async {
+        self.dependency?.analyticService?.logEvent(name: "editor_remove_background")
         guard let image = await self.dependency?.magicBackgroundService?.removeBackground(image: self.editImage) else { return }
         self.backgroundDeleted = true
         self.editImage = image
@@ -18,6 +19,7 @@ extension ZLEditImageViewController {
     }
 
     func drawBtnClick() {
+        self.dependency?.analyticService?.logEvent(name: "editor_draw")
         let isSelected = selectedTool != .draw
         if isSelected {
             selectedTool = .draw
@@ -34,6 +36,7 @@ extension ZLEditImageViewController {
     }
 
     func clipBtnClick() {
+        self.dependency?.analyticService?.logEvent(name: "editor_image_crop")
         var currentEditImage = editImage
         autoreleasepool {
             currentEditImage = buildImage()
@@ -78,11 +81,13 @@ extension ZLEditImageViewController {
     }
 
     func imageStickerBtnClick() {
+        self.dependency?.analyticService?.logEvent(name: "editor_add_clothes")
         ZLImageEditorConfiguration.default().imageStickerContainerView?.show(in: view)
         imageStickerContainerIsHidden = false
     }
 
     func textStickerBtnClick() {
+        self.dependency?.analyticService?.logEvent(name: "editor_image_text")
         if let fontChooserContainerView = ZLImageEditorConfiguration.default().fontChooserContainerView {
             fontChooserContainerView.show(in: view)
             fontChooserContainerIsHidden = false
@@ -109,6 +114,7 @@ extension ZLEditImageViewController {
     }
 
     func adjustBtnClick() {
+        self.dependency?.analyticService?.logEvent(name: "editor_image_settings")
         if selectedTool == .eraser {
             self.showHideMaskableView(isSelected: false)
             self.saveFromMaskableView()
@@ -131,6 +137,7 @@ extension ZLEditImageViewController {
     }
 
     func eraserButtonClick() {
+        self.dependency?.analyticService?.logEvent(name: "editor_image_eraser")
         filterCollectionView.isHidden = true
         adjustCollectionView.isHidden = true
         self.adjustSlider.isHidden = true
@@ -169,6 +176,7 @@ extension ZLEditImageViewController {
     }
 
     @objc func doneBtnClick() {
+        self.dependency?.analyticService?.logEvent(name: "clothes_new_editor_done")
         var textStickers: [(ZLTextStickerState, Int)] = []
         var imageStickers: [(ZLImageStickerState, Int)] = []
         for (index, view) in stickersContainer.subviews.enumerated() {

@@ -236,11 +236,11 @@ extension ZLEditImageViewController {
         }
 
         if needDismissAfterEdit {
-            dismiss(animated: animateDismiss) {
-                self.editFinishBlock?(resImage, editModel)
+            dismiss(animated: animateDismiss) { [unowned self] in
+                self.editFinishBlock?(self.originalImage, resImage, editModel, self.backgroundDeleted)
             }
         } else {
-            self.editFinishBlock?(resImage, editModel)
+            self.editFinishBlock?(self.originalImage, resImage, editModel, self.backgroundDeleted)
         }
     }
 

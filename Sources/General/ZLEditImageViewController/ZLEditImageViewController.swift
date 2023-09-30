@@ -1,6 +1,13 @@
 import UIKit
 import SnapKit
 
+public typealias ZLEditFinishBlock = (
+    _ orifinal: UIImage,
+    _ result: UIImage,
+    _ editModel: ZLEditImageModel?,
+    _ isMagicBackgroundApplied: Bool
+) -> Void
+
 open class ZLEditImageViewController: UIViewController {
 
     open lazy var mainScrollView: UIScrollView = {
@@ -327,7 +334,7 @@ open class ZLEditImageViewController: UIViewController {
     var backgroundDeleted = false
     var eraseUsed = false
 
-    @objc public var editFinishBlock: ((UIImage, ZLEditImageModel?) -> Void)?
+    @objc public var editFinishBlock: ZLEditFinishBlock?
 
     override open var prefersStatusBarHidden: Bool {
         return true

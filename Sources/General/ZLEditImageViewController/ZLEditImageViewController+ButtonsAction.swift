@@ -23,8 +23,10 @@ extension ZLEditImageViewController {
         let isSelected = selectedTool != .draw
         if isSelected {
             selectedTool = .draw
+            self.drawingImageView.isUserInteractionEnabled = true
         } else {
             selectedTool = nil
+            self.drawingImageView.isUserInteractionEnabled = false
         }
         drawColorCollectionView.isHidden = !isSelected
         self.revokeRedoContainer.isHidden = !isSelected
@@ -151,6 +153,7 @@ extension ZLEditImageViewController {
         self.showHideMaskableView(isSelected: isSelected)
         if isSelected {
             self.maskableView.configure(with: self.editImage, and: getImage("greyCheckerboard")!)
+            self.eraseUsed = true
         } else {
             self.saveFromMaskableView()
         }
@@ -165,7 +168,6 @@ extension ZLEditImageViewController {
         guard let image =  self.maskableView.image else { return }
         self.editImage = image
         resetContainerViewFrame()
-        self.eraseUsed = true
     }
 }
 
@@ -203,6 +205,9 @@ extension ZLEditImageViewController {
         var resImage = originalImage
         var editModel: ZLEditImageModel?
         if hasEdit {
+            if selectedTool == .eraser {
+                self.eraserButtonClick()
+            }
             autoreleasepool {
                 let hud = ZLProgressHUD(style: ZLImageEditorUIConfiguration.default().hudStyle)
                 hud.show()

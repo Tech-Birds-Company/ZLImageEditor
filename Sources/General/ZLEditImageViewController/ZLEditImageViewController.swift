@@ -265,7 +265,7 @@ open class ZLEditImageViewController: UIViewController {
     lazy var drawingImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
-        view.isUserInteractionEnabled = true
+        view.isUserInteractionEnabled = false
         return view
     }()
 
@@ -796,8 +796,8 @@ private extension ZLEditImageViewController {
 
         mainScrollView.addSubview(containerView)
         containerView.addSubview(imageView)
-        containerView.addSubview(drawingImageView)
         containerView.addSubview(stickersContainer)
+        containerView.addSubview(drawingImageView)
 
         self.view.addSubview(bottomToolsContainerView) { make in
             make.top.equalTo(mainScrollView.snp.bottom)

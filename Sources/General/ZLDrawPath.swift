@@ -1,15 +1,9 @@
-//
-//  ZLDrawPath.swift
-//  ZLImageEditor
-//
-//  Created by Musa on 30.05.2023.
-//
-
 import UIKit
 
 // MARK: Draw path
 
-public class ZLDrawPath: NSObject {
+public final class ZLDrawPath: NSObject {
+
     public let pathColor: UIColor
 
     public let path: UIBezierPath
@@ -65,4 +59,5 @@ public class ZLDrawPath: NSObject {
         pathColor.set()
         path.stroke()
     }
+
 }

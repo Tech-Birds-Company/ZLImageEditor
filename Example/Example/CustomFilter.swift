@@ -78,7 +78,7 @@ kernel vec4 myHazeRemovalKernel(
             else {
                 return nil
         }
-        let src: CISampler = CISampler(image: inputImage)
+        let src = CISampler(image: inputImage)
         return hazeRemovalKernel.apply(extent: inputImage.extent,
             roiCallback: { (_, rect) -> CGRect in
                 return rect
@@ -87,7 +87,7 @@ kernel vec4 myHazeRemovalKernel(
             inputColor,
             inputDistance,
             inputSlope
-            ])
+        ])
     }
 
     override var attributes: [String: Any] {

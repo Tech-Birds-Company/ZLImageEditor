@@ -1,13 +1,7 @@
-//
-//  ZLEditImageModel.swift
-//  ZLImageEditor
-//
-//  Created by Musa on 30.05.2023.
-//
-
 import UIKit
 
-public class ZLEditImageModel: NSObject {
+public final class ZLEditImageModel: NSObject {
+
     public let drawPaths: [ZLDrawPath]
 
     public let editRect: CGRect?
@@ -52,4 +46,5 @@ public class ZLEditImageModel: NSObject {
         self.imageStickers = imageStickers
         super.init()
     }
+
 }

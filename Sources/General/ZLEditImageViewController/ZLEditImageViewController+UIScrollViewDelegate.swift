@@ -1,13 +1,7 @@
-//
-//  ZLEditImageViewController+UIScrollViewDelegate.swift
-//  ZLImageEditor
-//
-//  Created by Musa on 30.05.2023.
-//
-
 import UIKit
 
 extension ZLEditImageViewController: UIScrollViewDelegate {
+
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return containerView
     }
@@ -49,4 +43,5 @@ extension ZLEditImageViewController: UIScrollViewDelegate {
         }
         isScrolling = false
     }
+
 }

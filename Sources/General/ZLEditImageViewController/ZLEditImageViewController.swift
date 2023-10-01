@@ -74,7 +74,7 @@ open class ZLEditImageViewController: UIViewController {
         view.layer.masksToBounds = false
         view.layer.shadowRadius = 0
         view.layer.shadowOpacity = 1
-        view.layer.shadowColor =  UIColor(red: 0, green: 0, blue: 0, alpha: 0.3).cgColor
+        view.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3).cgColor
         view.layer.shadowOffset = CGSize(width: 0, height: 0.5)
         return view
     }()
@@ -769,8 +769,9 @@ open class ZLEditImageViewController: UIViewController {
 
 // MARK: - maskable handle actions
 extension ZLEditImageViewController {
+
     @objc func handleEraseRevealControl(_ sender: UISegmentedControl) {
-        if let drawingAction  = DrawingAction(rawValue: sender.selectedSegmentIndex) {
+        if let drawingAction = DrawingAction(rawValue: sender.selectedSegmentIndex) {
             maskableView.drawingAction = drawingAction
         }
     }
@@ -778,6 +779,7 @@ extension ZLEditImageViewController {
     @objc func handleCircleRadiusSlider(_ sender: UISlider) {
         maskableView.cirleRadius = CGFloat(sender.value)
     }
+
 }
 
 // MARK: - setup UI
@@ -962,4 +964,5 @@ private extension ZLEditImageViewController {
             }
         }
     }
+
 }

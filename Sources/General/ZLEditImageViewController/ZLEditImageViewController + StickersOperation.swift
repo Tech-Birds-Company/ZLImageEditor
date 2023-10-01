@@ -1,14 +1,7 @@
-//
-//  ZLEditImageViewController + StickersOperation.swift
-//  ZLImageEditor
-//
-//  Created by Musa on 25.06.2023.
-//
-
-import Foundation
 import UIKit
 
 extension ZLEditImageViewController {
+
     func showInputTextVC(
         _ text: String? = nil,
         textColor: UIColor? = nil,
@@ -118,4 +111,5 @@ extension ZLEditImageViewController {
             (view as? ZLStickerViewAdditional)?.addScale(scale)
         }
     }
+
 }

@@ -44,7 +44,7 @@ extension ZLClipImageViewController {
 class ZLClipImageViewController: UIViewController {
     static let bottomToolViewH: CGFloat = 90
 
-    static let clipRatioItemSize  = CGSize(width: 60, height: 70)
+    static let clipRatioItemSize = CGSize(width: 60, height: 70)
 
     var animateDismiss = true
 

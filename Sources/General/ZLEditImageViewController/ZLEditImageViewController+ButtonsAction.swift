@@ -158,7 +158,7 @@ extension ZLEditImageViewController {
     }
 
     private func saveFromMaskableView() {
-        guard let image =  self.maskableView.image else { return }
+        guard let image = self.maskableView.image else { return }
         self.editImage = image
         resetContainerViewFrame()
     }

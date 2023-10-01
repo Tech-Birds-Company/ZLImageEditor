@@ -19,7 +19,7 @@ class FontChooserContainerView: UIView, ZLTextFontChooserDelegate {
 
     var hideBlock: (() -> Void)?
 
-    private var fontsRegistered: Bool = false
+    private var fontsRegistered = false
 
     private var fonts: [String] {
         return [

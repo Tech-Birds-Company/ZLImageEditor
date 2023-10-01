@@ -1,13 +1,7 @@
-//
-//  ZLEditImageViewController + UICollectionView.swift
-//  ZLImageEditor
-//
-//  Created by Musa on 30.05.2023.
-//
-
 import UIKit
 
 extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == editToolCollectionView {
             return tools.count
@@ -137,4 +131,5 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         collectionView.reloadData()
     }
+
 }

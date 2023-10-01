@@ -1,10 +1,3 @@
-//
-//
-//  MaskableView
-//
-//  Created by Duncan Champney on 5/30/21.
-//
-
 import UIKit
 
 enum DrawingAction: Int {
@@ -12,16 +5,14 @@ enum DrawingAction: Int {
     case draw = 1
 }
 
-class MaskableView: UIView {
+final class MaskableView: UIView {
 
     public var drawingAction: DrawingAction = .erase
     public var circleRadius: CGFloat = 20
     public var maskDrawingAlpha: CGFloat = 1.0
     public var image: UIImage? {
         guard let renderer = renderer else { return nil}
-        let result = renderer.image {
-            context in
-
+        let result = renderer.image { context in
             return layer.render(in: context.cgContext)
         }
         return result
@@ -172,4 +163,5 @@ class MaskableView: UIView {
         panGestureRecognizer.addTarget(self, action: #selector(gestureRecognizerUpdate(_:)))
         self.addGestureRecognizer(panGestureRecognizer)
     }
+
 }

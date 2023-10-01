@@ -1,10 +1,3 @@
-//
-//  UIApllication.swift
-//  ZLImageEditor
-//
-//  Created by Musa on 12.06.2023.
-//
-
 import Foundation
 import UIKit
 

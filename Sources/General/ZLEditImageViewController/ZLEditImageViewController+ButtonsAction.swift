@@ -1,15 +1,8 @@
-//
-//  ZLEditImageViewController+ButtonsAction.swift
-//  ZLImageEditor
-//
-//  Created by Musa on 25.06.2023.
-//
-
-import Foundation
 import UIKit
 
 // MARK: - tools actions
 extension ZLEditImageViewController {
+
     func magicBackgroundButtonClick() async {
         self.dependency?.analyticService?.logEvent(name: "editor_remove_background")
         guard let image = await self.dependency?.magicBackgroundService?.removeBackground(image: self.editImage) else { return }
@@ -169,10 +162,12 @@ extension ZLEditImageViewController {
         self.editImage = image
         resetContainerViewFrame()
     }
+
 }
 
 // MARK: - buttons actions
 extension ZLEditImageViewController {
+
     @objc func cancelBtnClick() {
         dismiss(animated: animateDismiss, completion: nil)
     }
@@ -182,7 +177,7 @@ extension ZLEditImageViewController {
         var textStickers: [(ZLTextStickerState, Int)] = []
         var imageStickers: [(ZLImageStickerState, Int)] = []
         for (index, view) in stickersContainer.subviews.enumerated() {
-            if let ts = view as? ZLTextStickerView, let _ = ts.label.text {
+            if let ts = view as? ZLTextStickerView, ts.label.text != nil {
                 textStickers.append((ts.state, index))
             } else if let ts = view as? ZLImageStickerView {
                 imageStickers.append((ts.state, index))

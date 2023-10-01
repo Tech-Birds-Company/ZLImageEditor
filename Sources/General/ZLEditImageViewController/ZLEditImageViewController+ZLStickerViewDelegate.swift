@@ -1,13 +1,7 @@
-//
-//  ZLEditImageViewController+ZLStickerViewDelegate.swift
-//  ZLImageEditor
-//
-//  Created by Musa on 30.05.2023.
-//
-
 import UIKit
 
 extension ZLEditImageViewController: ZLStickerViewDelegate {
+
     func stickerBeginOperation(_ sticker: UIView) {
         ashbinView.layer.removeAllAnimations()
         ashbinView.isHidden = false
@@ -92,4 +86,5 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
             }
         }
     }
+
 }

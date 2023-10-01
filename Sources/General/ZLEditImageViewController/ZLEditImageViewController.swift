@@ -769,6 +769,7 @@ open class ZLEditImageViewController: UIViewController {
 
 // MARK: - maskable handle actions
 extension ZLEditImageViewController {
+
     @objc func handleEraseRevealControl(_ sender: UISegmentedControl) {
         if let drawingAction  = DrawingAction(rawValue: sender.selectedSegmentIndex) {
             maskableView.drawingAction = drawingAction
@@ -778,6 +779,7 @@ extension ZLEditImageViewController {
     @objc func handleCircleRadiusSlider(_ sender: UISlider) {
         maskableView.cirleRadius = CGFloat(sender.value)
     }
+
 }
 
 // MARK: - setup UI
@@ -962,4 +964,5 @@ private extension ZLEditImageViewController {
             }
         }
     }
+
 }

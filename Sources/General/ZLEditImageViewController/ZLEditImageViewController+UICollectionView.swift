@@ -95,8 +95,12 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
                 adjustBtnClick()
 
             case .magicBackground:
+                activityIndicator.startAnimating()
                 Task(priority: .userInitiated) {
                     await self.magicBackgroundButtonClick()
+                    await MainActor.run { [weak self] in
+                        self?.activityIndicator.stopAnimating()
+                    }
                 }
 
             case .eraser:

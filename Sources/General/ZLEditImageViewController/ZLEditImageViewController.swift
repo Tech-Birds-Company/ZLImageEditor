@@ -246,6 +246,8 @@ open class ZLEditImageViewController: UIViewController {
         return slider
     }()
 
+    lazy var activityIndicator = ZLActivityIndicatorView()
+
     var animateDismiss = true
     var needDismissAfterEdit = false
 
@@ -786,7 +788,7 @@ extension ZLEditImageViewController {
 private extension ZLEditImageViewController {
 
     func setupMainUI() {
-        self.view.addSubview(headerView) { make in
+        view.addSubview(headerView) { make in
             make.top.leading.trailing.equalToSuperview()
             let window = UIApplication.shared.keyWindow
             let topSafeArea = window?.safeAreaInsets.top ?? 0.0
@@ -798,7 +800,7 @@ private extension ZLEditImageViewController {
             make.bottom.equalToSuperview()
         }
 
-        self.view.addSubview(mainScrollView) { make in
+        view.addSubview(mainScrollView) { make in
             make.top.equalTo(headerView.snp.bottom)
             make.leading.trailing.equalToSuperview()
         }
@@ -808,7 +810,7 @@ private extension ZLEditImageViewController {
         containerView.addSubview(stickersContainer)
         containerView.addSubview(drawingImageView)
 
-        self.view.addSubview(bottomToolsContainerView) { make in
+        view.addSubview(bottomToolsContainerView) { make in
             make.top.equalTo(mainScrollView.snp.bottom)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
@@ -826,6 +828,13 @@ private extension ZLEditImageViewController {
             make.horizontalEdges.equalToSuperview().inset(16)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).inset(16)
             make.height.equalTo(52)
+        }
+
+        view.addSubview(activityIndicator) { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.width.equalTo(70)
+            make.height.equalTo(70)
         }
     }
 

@@ -409,7 +409,12 @@ open class ZLEditImageViewController: UIViewController {
         originalImage = image.zl.fixOrientation()
         editImage = originalImage
         editImageWithoutAdjust = originalImage
-        editRect = editModel?.editRect ?? CGRect(origin: .zero, size: image.size)
+        // TODO: - костыль который правит CLB-122
+        var defaultRect: CGRect = .zero
+        if editModel?.imageStickers == nil {
+            defaultRect = CGRect(origin: .zero, size: image.size)
+        }
+        editRect = editModel?.editRect ?? defaultRect
         drawColors = ZLImageEditorConfiguration.default().drawColors
         currentFilter = editModel?.selectFilter ?? .normal
         drawPaths = editModel?.drawPaths ?? []
@@ -539,7 +544,9 @@ open class ZLEditImageViewController: UIViewController {
     func resetContainerViewFrame() {
         mainScrollView.setZoomScale(1, animated: true)
         imageView.image = editImage
-
+        if self.editRect == .zero {
+            self.editRect = mainScrollView.bounds
+        }
         let editSize = editRect.size
         let scrollViewSize = mainScrollView.frame.size
         let ratio = min(scrollViewSize.width / editSize.width, scrollViewSize.height / editSize.height)

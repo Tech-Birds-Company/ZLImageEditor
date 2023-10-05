@@ -281,7 +281,15 @@ open class ZLEditImageViewController: UIViewController {
     // Show text and image stickers.
     lazy var stickersContainer = UIView()
 
-    var selectedTool: ZLImageEditorConfiguration.EditTool?
+    var selectedTool: ZLImageEditorConfiguration.EditTool? {
+        didSet {
+            if selectedTool == .draw {
+                self.drawingImageView.isUserInteractionEnabled = true
+            } else {
+                self.drawingImageView.isUserInteractionEnabled = false
+            }
+        }
+    }
 
     var selectedAdjustTool: ZLImageEditorConfiguration.AdjustTool?
 
@@ -409,7 +417,7 @@ open class ZLEditImageViewController: UIViewController {
         originalImage = image.zl.fixOrientation()
         editImage = originalImage
         editImageWithoutAdjust = originalImage
-        // TODO: - костыль который правит CLB-122
+        // FIXME: - костыль который правит CLB-122
         var defaultRect: CGRect = .zero
         if editModel?.imageStickers == nil {
             defaultRect = CGRect(origin: .zero, size: image.size)
@@ -745,8 +753,6 @@ open class ZLEditImageViewController: UIViewController {
         UIGraphicsBeginImageContextWithOptions(editImage.size, false, editImage.scale)
         editImage.draw(at: .zero)
 
-        drawingImageView.image?.draw(in: CGRect(origin: .zero, size: imageSize))
-
         if !stickersContainer.subviews.isEmpty, let context = UIGraphicsGetCurrentContext() {
             let scale = self.imageSize.width / stickersContainer.frame.width
             stickersContainer.subviews.forEach { view in
@@ -756,6 +762,8 @@ open class ZLEditImageViewController: UIViewController {
             stickersContainer.layer.render(in: context)
             context.concatenate(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
         }
+
+        drawingImageView.image?.draw(in: CGRect(origin: .zero, size: imageSize))
 
         let temp = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()

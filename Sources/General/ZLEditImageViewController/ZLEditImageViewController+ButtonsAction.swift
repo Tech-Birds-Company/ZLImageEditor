@@ -76,6 +76,12 @@ extension ZLEditImageViewController {
     }
 
     func imageStickerBtnClick() {
+        self.selectedTool = nil
+        drawColorCollectionView.isHidden = true
+        self.revokeRedoContainer.isHidden = true
+        filterCollectionView.isHidden = true
+        adjustCollectionView.isHidden = true
+        self.adjustSlider.isHidden = true
         self.dependency?.analyticService?.logEvent(name: "editor_add_clothes")
         ZLImageEditorConfiguration.default().imageStickerContainerView?.show(in: view)
         imageStickerContainerIsHidden = false

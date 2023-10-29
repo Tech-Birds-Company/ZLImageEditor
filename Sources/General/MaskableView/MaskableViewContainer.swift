@@ -50,11 +50,9 @@ final class MaskableViewContainer: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        if maskableView.bounds != self.bounds {
-            self.maskableView.frame = self.bounds
-            maskableView.updateBounds()
-            self.backgroundImage.frame = self.bounds
-        }
+        self.maskableView.frame = self.bounds
+        maskableView.updateBounds()
+        self.backgroundImage.frame = self.bounds
     }
 
     func configure(with image: UIImage, and background: UIImage) {

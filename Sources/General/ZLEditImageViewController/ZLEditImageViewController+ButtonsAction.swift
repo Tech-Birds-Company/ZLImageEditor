@@ -7,6 +7,9 @@ extension ZLEditImageViewController {
         self.dependency?.analyticService?.logEvent(name: "editor_remove_background")
         guard let image = await self.dependency?.magicBackgroundService?.removeBackground(image: self.editImage) else { return }
         self.backgroundDeleted = true
+        self.undoMagicBackgroundImage = self.editImage
+        self.undoMagicBackgroundButton.isHidden = false
+        
         self.editImage = image
         resetContainerViewFrame()
     }
@@ -173,6 +176,13 @@ extension ZLEditImageViewController {
 
 // MARK: - buttons actions
 extension ZLEditImageViewController {
+
+    @objc func undoMagicBackground() {
+        guard let undoMagicBackgroundImage else { return }
+        self.editImage = undoMagicBackgroundImage
+        self.undoMagicBackgroundImage = nil
+        self.undoMagicBackgroundButton.isHidden = true
+    }
 
     @objc func cancelBtnClick() {
         dismiss(animated: animateDismiss, completion: nil)

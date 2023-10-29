@@ -93,6 +93,15 @@ open class ZLEditImageViewController: UIViewController {
         return btn
     }()
 
+    open lazy var undoMagicBackgroundButton: ZLEnlargeButton = {
+        let btn = ZLEnlargeButton(type: .custom)
+        btn.setTitle(localLanguageTextValue(.revert), for: .normal)
+        btn.setTitleColor(.zl.editDoneBtnBgColor, for: .normal)
+        btn.addTarget(self, action: #selector(self.undoMagicBackground), for: .touchUpInside)
+        btn.isHidden = true
+        return btn
+    }()
+
     open lazy var doneBtn: UIButton = {
         let btn = UIButton(type: .custom)
         btn.titleLabel?.font = ZLImageEditorLayout.bottomToolTitleFont
@@ -265,6 +274,8 @@ open class ZLEditImageViewController: UIViewController {
     var selectRatio: ZLImageClipRatio?
 
     var editImage: UIImage
+
+    var undoMagicBackgroundImage: UIImage?
 
     var editImageWithoutAdjust: UIImage
 
@@ -811,6 +822,12 @@ private extension ZLEditImageViewController {
         }
         headerView.addSubview(cancelBtn) { make in
             make.leading.equalToSuperview().offset(24)
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            make.bottom.equalToSuperview()
+        }
+
+        headerView.addSubview(self.undoMagicBackgroundButton) { make in
+            make.trailing.equalToSuperview().offset(-16)
             make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
             make.bottom.equalToSuperview()
         }
